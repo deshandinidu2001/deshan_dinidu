@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="760" viewBox="0 0 1000 760"><defs><pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0v48" fill="none" stroke="#87949F" stroke-opacity=".09" stroke-width="1"/></pattern><linearGradient id="metal" x2="1" y2=".4"><stop stop-color="#303a30"/><stop offset=".45" stop-color="#748066"/><stop offset=".6" stop-color="#394330"/><stop offset="1" stop-color="#1b251c"/></linearGradient><linearGradient id="screen" x2="0" y2="1"><stop stop-color="#29372b"/><stop offset="1" stop-color="#141c16"/></linearGradient></defs><path fill="#18221a" d="M0 0h1000v760H0z"/><path fill="url(#grid)" d="M0 0h1000v760H0z"/>
+<text x="75" y="90" fill="#edeae2" font-family="monospace" font-size="15" letter-spacing="2">SPECTRA / LEAF</text><text x="75" y="115" fill="#879879" font-family="monospace" font-size="8" letter-spacing="2">SENSE. UNDERSTAND. CONNECT.</text><path d="M914 80h12m-6-6v12" stroke="#87949F" stroke-opacity=".5"/>
+<g transform="translate(540 380) rotate(-22)">
+<ellipse cy="150" rx="230" ry="84" fill="#0b120d" opacity=".65"/>
+<path d="M-183-25v133c0 70 366 70 366 0V-25" fill="url(#metal)" stroke="#66735c" stroke-width="1"/>
+<path d="M-183 8c0 69 366 69 366 0" stroke="#111a12" stroke-opacity=".5" fill="none"/><path d="M-183 21c0 69 366 69 366 0" stroke="#111a12" stroke-opacity=".5" fill="none"/><path d="M-183 34c0 69 366 69 366 0" stroke="#111a12" stroke-opacity=".5" fill="none"/><path d="M-183 47c0 69 366 69 366 0" stroke="#111a12" stroke-opacity=".5" fill="none"/><path d="M-183 60c0 69 366 69 366 0" stroke="#111a12" stroke-opacity=".5" fill="none"/><path d="M-183 73c0 69 366 69 366 0" stroke="#111a12" stroke-opacity=".5" fill="none"/><path d="M-183 86c0 69 366 69 366 0" stroke="#111a12" stroke-opacity=".5" fill="none"/><path d="M-183 99c0 69 366 69 366 0" stroke="#111a12" stroke-opacity=".5" fill="none"/><path d="M-183 112c0 69 366 69 366 0" stroke="#111a12" stroke-opacity=".5" fill="none"/>
+<ellipse cy="-25" rx="183" ry="72" fill="#31402c" stroke="#879878"/>
+<ellipse cy="-28" rx="155" ry="57" fill="#152218" stroke="#60794d"/>
+<ellipse cy="-28" rx="121" ry="42" fill="#1d2e1c" stroke="#405b35"/>
+<path d="M-62-20Q-42-87 65-65Q43 1-62-20Z" fill="#6f9140" stroke="#a8c86c" stroke-width=".8"/>
+<path d="M-70-15Q-15-44 65-65m-83 28 8-24m17 14 15 13" fill="none" stroke="#b3d276" stroke-width="1"/>
+<path d="M-116 40Q-20-8 99 42" stroke="#b1ce7c" stroke-opacity=".5" fill="none" stroke-dasharray="3 7"/>
+<circle cx="125" cy="-30" r="7" fill="#c8ff3d"/><circle cx="-114" cy="-52" r="5" fill="#a3c17e"/>
+</g>
+<g transform="translate(117 380) rotate(-12)"><rect width="158" height="234" rx="19" fill="#0c110e" stroke="#63715a" stroke-width="2"/><rect x="9" y="10" width="140" height="214" rx="12" fill="url(#screen)"/><rect x="61" y="15" width="36" height="5" rx="2" fill="#0c110e"/><text x="25" y="55" fill="#edeae2" font-family="monospace" font-size="10" letter-spacing="2">SPECTRA</text><path d="M25 79h106M25 91h63" stroke="#58674f"/><path d="M25 150l18-7 17 3 18-26 13 4 22-21 17 9" fill="none" stroke="#c8ff3d" stroke-width="2"/><path d="M25 170h106M25 184h66M25 198h84" stroke="#58674f" stroke-opacity=".5"/><circle cx="124" cy="53" r="3" fill="#c8ff3d"/></g>
+<path d="M290 485C363 508 364 360 405 353" fill="none" stroke="#c8ff3d" stroke-opacity=".6" stroke-dasharray="3 6"/>
+<text x="714" y="263" fill="#bac6ae" font-family="monospace" font-size="9" letter-spacing="2">SENSOR</text><path d="M708 268h-40l-15 43" stroke="#7e906d" fill="none"/><circle cx="653" cy="311" r="3" fill="#c8ff3d"/>
+<text x="75" y="680" fill="#879879" font-family="monospace" font-size="9" letter-spacing="2">A CONNECTED MONITORING SYSTEM</text><path d="M914 670h12m-6-6v12" stroke="#87949F" stroke-opacity=".5"/>
+</svg>
