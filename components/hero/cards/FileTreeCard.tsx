@@ -14,7 +14,7 @@ export function FileTreeCard() {
             { name: "work", href: "#work" },
             { name: "ai-lab", href: "#ai-lab" },
             { name: "about", href: "#about" },
-            { name: "notes", href: "#notes" },
+            { name: "toolkit", href: "#built-with" },
             { name: "contact", href: "#contact" },
           ].map(({ name, href }) => (
             <li key={name}>

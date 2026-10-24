@@ -1,7 +1,6 @@
 "use client";
 import type { CSSProperties, ReactNode } from "react";
 import { CARD_POSITIONS, type CardId, type CardPosition } from "./config";
-import { useHeroLight } from "./useHeroLight";
 
 export function HeroCard({
   id,
@@ -14,7 +13,6 @@ export function HeroCard({
   children: ReactNode;
   interactive?: boolean;
 }) {
-  const { lit } = useHeroLight();
   const position = CARD_POSITIONS[id];
   const tablet = {
     ...position,
@@ -42,9 +40,7 @@ export function HeroCard({
     <div
       className={`hero-card-anchor hero-card-${id}`}
       style={style}
-      aria-hidden={interactive && lit ? undefined : true}
-      inert={!lit}
-      data-lit={lit}
+      aria-hidden={interactive ? undefined : true}
     >
       <div className="hero-card-reveal">
         <div className="hero-card-float">

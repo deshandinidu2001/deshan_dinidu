@@ -4,7 +4,7 @@ import { useEffect, useRef, useSyncExternalStore } from "react";
 import { JetBrains_Mono } from "next/font/google";
 import { HeroScene } from "./HeroScene";
 import { HeroLightProvider, useHeroLight } from "./useHeroLight";
-import { HeroText } from "./HeroText";
+import { HeroText, HeroNote } from "./HeroText";
 import { CodeCard } from "./cards/CodeCard";
 import { FileTreeCard } from "./cards/FileTreeCard";
 import { AiCard } from "./cards/AiCard";
@@ -58,6 +58,7 @@ function HeroContent() {
           <div className="hero-background-anchor">
             <HeroScene theme={theme} />
           </div>
+          <HeroNote />
           <div className="hero-cards-anchor">
             <CodeCard />
             <FileTreeCard />

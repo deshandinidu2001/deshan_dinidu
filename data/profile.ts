@@ -26,7 +26,6 @@ export const navigation = [
   { label: "Work", href: "/#work" },
   { label: "AI Lab", href: "/#ai-lab" },
   { label: "About", href: "/#about" },
-  { label: "Notes", href: "/#notes" },
   { label: "Contact", href: "/#contact" },
 ];
 

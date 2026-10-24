@@ -6,9 +6,7 @@ import { ProcessStrip } from "@/components/sections/process-strip";
 import { AILab } from "@/components/sections/ai-lab";
 import { Capabilities } from "@/components/sections/capabilities";
 import { About } from "@/components/sections/about";
-import { Notes } from "@/components/sections/notes";
-import { ExperimentTeaser } from "@/components/sections/experiment-teaser";
-import { Quote } from "@/components/sections/quote";
+import { FerrofluidBreak } from "@/components/sections/ferrofluid-break";
 import { Contact } from "@/components/sections/contact";
 import { getContributions } from "@/lib/contributions";
 export const revalidate = 3600;
@@ -25,9 +23,7 @@ export default async function Home() {
         <AILab />
         <Capabilities />
         <About />
-        <Notes />
-        <ExperimentTeaser />
-        <Quote />
+        <FerrofluidBreak />
       </main>
       <Contact />
     </>

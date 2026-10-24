@@ -1,91 +1,109 @@
 "use client";
 import { flushSync } from "react-dom";
-let changing = false;
+let active: ViewTransition | null = null;
+let generation = 0;
+let desiredTheme: "dark" | "light" | null = null;
 
 export async function toggleThemeFromButton(button: HTMLButtonElement) {
-  if (changing) return;
   const root = document.documentElement;
-  const theme = root.dataset.theme === "dark" ? "light" : "dark";
+  const current = active ? desiredTheme : root.dataset.theme;
+  const theme = current === "dark" ? "light" : "dark";
+  desiredTheme = theme;
+  const request = ++generation;
+  active?.skipTransition();
   const apply = () => {
+    if (request !== generation) return;
     root.dataset.theme = theme;
     try {
       localStorage.setItem("signal-theme", theme);
     } catch {}
     window.dispatchEvent(new Event("theme-change"));
   };
+  const finish = () => {
+    if (request === generation) {
+      delete root.dataset.themeTransition;
+      active = null;
+      desiredTheme = null;
+    }
+  };
   if (
     !document.startViewTransition ||
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    matchMedia("(prefers-reduced-motion: reduce)").matches
   ) {
     apply();
+    finish();
     return;
   }
-  changing = true;
   const box = button.getBoundingClientRect(),
     x = box.left + box.width / 2,
     y = box.top + box.height / 2;
   const radius = Math.hypot(
-    Math.max(x, window.innerWidth - x),
-    Math.max(y, window.innerHeight - y),
+    Math.max(x, innerWidth - x),
+    Math.max(y, innerHeight - y),
   );
+  // Native view transitions temporarily hit-test the document snapshot rather
+  // than its buttons. Forward a repeat click at this control so it never feels
+  // locked while the circular reveal is playing.
+  const repeatClick = (event: MouseEvent) => {
+    if (request !== generation || event.target !== root) return;
+    if (
+      event.clientX < box.left ||
+      event.clientX > box.right ||
+      event.clientY < box.top ||
+      event.clientY > box.bottom
+    )
+      return;
+    event.stopImmediatePropagation();
+    void toggleThemeFromButton(button);
+  };
+  window.addEventListener("click", repeatClick, true);
   root.dataset.themeTransition = "true";
-  const transition = document.startViewTransition(async () => {
-    flushSync(apply);
-    // Snapshot the complete incoming image so the circular reveal never exposes
-    // an empty image box while a newly selected theme asset is decoding.
-    const images = Array.from(
-      document.querySelectorAll<HTMLImageElement>(
-        `[data-hero-theme="${theme}"] img`,
-      ),
-    );
-    await Promise.all(images.map((image) => image.decode().catch(() => {})));
-    await new Promise<void>((resolve) =>
-      requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
-    );
-  });
   try {
-    await transition.ready;
-    const animations = [
-      root.animate(
-        {
-          clipPath: [
-            `circle(0px at ${x}px ${y}px)`,
-            `circle(${radius}px at ${x}px ${y}px)`,
-          ],
-        },
-        {
-          duration: 580,
-          easing: "cubic-bezier(.22,1,.36,1)",
-          pseudoElement: "::view-transition-new(root)",
-        },
-      ).finished,
-    ];
-    if (document.querySelector(".hero-scene-mask")) {
-      animations.push(
-        root.animate(
-          { opacity: [1, 0] },
-          {
-            duration: 400,
-            easing: "ease",
-            pseudoElement: "::view-transition-old(hero-workbench)",
-          },
-        ).finished,
-        root.animate(
-          { opacity: [0, 1] },
-          {
-            duration: 400,
-            easing: "ease",
-            pseudoElement: "::view-transition-new(hero-workbench)",
-          },
-        ).finished,
+    const transition = document.startViewTransition(async () => {
+      if (request !== generation) return;
+      flushSync(apply);
+      const images = Array.from(
+        document.querySelectorAll<HTMLImageElement>(
+          `[data-hero-theme="${theme}"] img`,
+        ),
       );
+      images.forEach((image) => {
+        image.loading = "eager";
+      });
+      // A slow or failed image must never leave the theme control locked.
+      await Promise.race([
+        Promise.allSettled(images.map((image) => image.decode())),
+        new Promise((resolve) => setTimeout(resolve, 1200)),
+      ]);
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+    active = transition;
+    await transition.ready;
+    if (request !== generation) {
+      transition.skipTransition();
+      return;
     }
-    await Promise.all(animations);
+    await root.animate(
+      {
+        clipPath: [
+          `circle(0px at ${x}px ${y}px)`,
+          `circle(${radius}px at ${x}px ${y}px)`,
+        ],
+      },
+      {
+        duration: 550,
+        easing: "cubic-bezier(.22,1,.36,1)",
+        pseudoElement: "::view-transition-new(root)",
+      },
+    ).finished;
     await transition.finished;
   } catch {
-    transition.skipTransition();
+    if (request === generation) {
+      active?.skipTransition();
+      apply();
+    }
   } finally {
-    delete root.dataset.themeTransition;
-    changing = false;
+    window.removeEventListener("click", repeatClick, true);
+    finish();
   }
 }

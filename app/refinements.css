@@ -80,14 +80,6 @@ html[data-theme-transition] *::after {
 }
 /* Give the desk its own snapshot: its theme pair cross-fades while the page
    still reveals the new colors from the navbar's circular theme control. */
-html[data-theme-transition] .hero-scene-mask {
-  view-transition-name: hero-workbench !important;
-}
-html[data-theme-transition]::view-transition-old(hero-workbench),
-html[data-theme-transition]::view-transition-new(hero-workbench) {
-  animation: none !important;
-  mix-blend-mode: normal;
-}
 .toolkit-section {
   padding-top: 100px;
   padding-bottom: 110px;

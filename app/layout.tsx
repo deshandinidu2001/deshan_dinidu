@@ -11,6 +11,7 @@ import { siteCopy } from "@/data/site";
 import { RouteComplete } from "@/components/motion/route-complete";
 import { PageProgress } from "@/components/ui/page-progress";
 import "./refinements.css";
+import "./redesign.css";
 const displayFont = localFont({
   src: "../node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2",
   variable: "--font-space",

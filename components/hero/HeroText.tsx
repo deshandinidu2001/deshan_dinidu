@@ -56,23 +56,6 @@ export function HeroText() {
               </li>
             ))}
           </ol>
-          <div className="hero-handwritten">
-            <span>{profile.tagline}</span>
-            <svg
-              className="hero-note-arrow"
-              viewBox="0 0 125 85"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path
-                d="M7 74C17 17 58 8 105 22M89 7l19 17-24 7"
-                stroke="currentColor"
-                strokeWidth="1.7"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </div>
           <div className="hero-actions">
             <Link className="hero-primary" href="#work">
               {siteCopy.hero.cta}
@@ -85,6 +68,28 @@ export function HeroText() {
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+export function HeroNote() {
+  return (
+    <div className="hero-handwritten">
+      <span>{profile.tagline}</span>
+      <svg
+        className="hero-note-arrow"
+        viewBox="0 0 125 85"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M7 74C17 17 58 8 105 22M89 7l19 17-24 7"
+          stroke="currentColor"
+          strokeWidth="1.7"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
     </div>
   );
 }

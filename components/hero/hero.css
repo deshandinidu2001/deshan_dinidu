@@ -308,43 +308,6 @@ body:has(#hero) {
     opacity 0.4s ease,
     filter 0.4s ease;
 }
-.hero-card-anchor[data-lit="false"] {
-  opacity: 0.35;
-  filter: grayscale(1) blur(1px);
-  pointer-events: none;
-}
-.hero-card-anchor[data-lit="true"] {
-  opacity: 1;
-  filter: none;
-}
-.hero-card-anchor[data-lit="true"] .hero-card-reveal {
-  animation: hero-card-pop 0.5s cubic-bezier(0.22, 1, 0.36, 1) var(--card-delay)
-    both;
-}
-.hero-card-anchor[data-lit="true"] .hero-card-float {
-  animation: hero-card-float 7s ease-in-out calc(0.5s + var(--card-delay))
-    infinite;
-}
-.hero[data-hero-visible="false"] .hero-card-float {
-  animation-play-state: paused;
-}
-@keyframes hero-card-pop {
-  from {
-    transform: translateY(16px) scale(0.96);
-  }
-  to {
-    transform: translateY(0) scale(1);
-  }
-}
-@keyframes hero-card-float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
-}
 .hero-text-anchor {
   position: absolute;
   left: 0;

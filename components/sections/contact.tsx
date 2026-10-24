@@ -51,35 +51,39 @@ export function Contact() {
       id="contact"
       className="contact-section contact-redesigned section-shell"
     >
-      <div className="footer-invitation">
+      <div className="footer-invitation footer-invitation-new">
         <div>
-          <span className="mono">Have an idea worth building?</span>
+          <span className="mono">The next good conversation</span>
           <h2>
-            Let’s make
+            What are you
             <br />
-            something work.
+            working on?
           </h2>
           <p className="script footer-note">
-            A good conversation is a good start.
+            A rough idea is a perfectly good start.
           </p>
         </div>
-        <div className="footer-connect">
+        <div className="footer-project">
           <p>
-            Interfaces, applications, and the systems behind them. Tell me what
-            you have in mind.
+            Bring a question, a half-formed idea, or a system that needs a
+            better connection.
           </p>
           <button
-            className="footer-brief-button"
+            className="footer-project-trigger"
             onClick={() => {
               setCopied(false);
               setFeedback("");
               dialog.current?.showModal();
             }}
           >
-            Start a conversation <ArrowUpRight size={25} />
+            <ArrowUpRight size={34} strokeWidth={1.2} />
+            <span>
+              Write a<br />
+              project brief
+            </span>
           </button>
           {profile.email && (
-            <a className="text-link" href={`mailto:${profile.email}`}>
+            <a className="text-link" href={"mailto:" + profile.email}>
               <Mail size={16} />
               Email me
             </a>
@@ -95,7 +99,7 @@ export function Contact() {
             { label: "Work", href: "#work" },
             { label: "AI Lab", href: "#ai-lab" },
             { label: "About", href: "#about" },
-            { label: "Notes", href: "#notes" },
+            { label: "Toolkit", href: "#built-with" },
           ].map((link) => (
             <a key={link.href} href={link.href}>
               {link.label}

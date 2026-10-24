@@ -1,70 +1,63 @@
 "use client";
-import { useRef } from "react";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { ArrowRight } from "lucide-react";
-import { siteCopy } from "@/data/site";
-import { useScrollMotion } from "@/hooks/use-scroll-motion";
+import { useState } from "react";
+import { ArrowDownRight } from "lucide-react";
+import BlurText from "@/components/react-bits/BlurText";
+const steps = [
+  {
+    title: "Find the real problem",
+    text: "Start with the people, the context, and what needs to work. A useful question comes before a stack decision.",
+    output: "A clear problem and its constraints",
+  },
+  {
+    title: "Map the moving parts",
+    text: "Sketch the journey from the interface to the data. Make the relationships visible before making them complicated.",
+    output: "A flow, a small prototype, and a plan",
+  },
+  {
+    title: "Build one complete flow",
+    text: "Connect the frontend, API, and storage around a working slice. Learn from something you can actually use.",
+    output: "An end-to-end feature you can try",
+  },
+  {
+    title: "Test, refine, repeat",
+    text: "Check the edge cases, try it on a real device, and improve the details. Document what works and what comes next.",
+    output: "Working software and an honest handover",
+  },
+];
 export function ProcessStrip() {
-  const ref = useRef<HTMLElement>(null);
-  const reduced = useScrollMotion();
-  useGSAP(
-    () => {
-      if (reduced) return;
-      const mm = gsap.matchMedia();
-      mm.add("(min-width: 900px)", () => {
-        const track =
-          ref.current!.querySelector<HTMLElement>(".process-track")!;
-        gsap.to(track, {
-          x: () => -(track.scrollWidth - ref.current!.clientWidth + 160),
-          ease: "none",
-          scrollTrigger: {
-            trigger: ref.current,
-            start: "top 22%",
-            end: "+=1000",
-            pin: true,
-            scrub: 1,
-            invalidateOnRefresh: true,
-          },
-        });
-      });
-      return () => mm.revert();
-    },
-    { scope: ref, dependencies: [reduced], revertOnUpdate: true },
-  );
+  const [active, setActive] = useState(0);
   return (
-    <section
-      ref={ref}
-      className="process-section"
-      aria-label="From signal to system"
-    >
-      <div className="process-section-label mono">
-        {siteCopy.strip.label}
-        <ArrowRight size={18} />
+    <section id="process" className="build-process section-shell">
+      <div className="build-process-heading">
+        <span className="mono">How I approach a build</span>
+        <h2>
+          <BlurText text="Make the next step useful." />
+        </h2>
+        <p className="script">
+          Start small. Connect it properly. Keep improving.
+        </p>
       </div>
-      <div
-        className="process-track"
-        tabIndex={0}
-        role="region"
-        aria-label="Process stages, scroll horizontally to explore"
-        data-cursor="drag"
-      >
-        {siteCopy.strip.stages.map((stage, i) => (
-          <div key={stage.title} className="process-stage">
-            <span className="mono">{stage.code}</span>
-            <h3>
-              {stage.title}
-              <span className="stage-symbol" aria-hidden="true">
-                {["↳", "⌘", "⤳", "↗"][i]}
-              </span>
-            </h3>
-            <p>{stage.text}</p>
-            <div className="stage-line">
-              <i />
-              <span />
-            </div>
-          </div>
+      <ol className="build-steps">
+        {steps.map((step, i) => (
+          <li key={step.title}>
+            <button
+              type="button"
+              aria-pressed={active === i}
+              onClick={() => setActive(i)}
+            >
+              <span className="mono">0{i + 1}</span>
+              <span className="build-step-title">{step.title}</span>
+              <ArrowDownRight size={22} strokeWidth={1.3} aria-hidden="true" />
+            </button>
+          </li>
         ))}
+      </ol>
+      <div className="build-step-description" aria-live="polite">
+        <p>{steps[active].text}</p>
+        <span className="mono">
+          <i aria-hidden="true" />
+          {steps[active].output}
+        </span>
       </div>
     </section>
   );
