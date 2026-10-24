@@ -1,5 +1,34 @@
 @import "tailwindcss";
 
+/* Shared light/dark colors for the workbench, cards, and page details. */
+:root {
+  --hero-bg: #f4f1ea;
+  --text: #111111;
+  --hero-muted: rgba(17, 17, 17, 0.65);
+  --hero-accent: #4f7a00;
+  --accent-fill: #c6ff3d;
+  --on-accent: #111111;
+  --hero-line: rgba(17, 17, 17, 0.2);
+  --card-bg: #ffffff;
+  --card-border: rgba(17, 17, 17, 0.12);
+  --card-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  --rail-bg: #111111;
+  --rail-icon: #edeae0;
+}
+[data-theme="dark"] {
+  --hero-bg: #0b0f0d;
+  --text: #edeae0;
+  --hero-muted: rgba(237, 234, 224, 0.7);
+  --hero-accent: #c6ff3d;
+  --hero-line: rgba(198, 255, 61, 0.35);
+  --card-bg: #0f1512;
+  --card-border: rgba(198, 255, 61, 0.3);
+  --card-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.6), 0 0 24px rgba(198, 255, 61, 0.08);
+  --rail-bg: #0f1512;
+  --rail-icon: #c6ff3d;
+}
+
 @theme inline {
   --color-ink: #0b0d10;
   --color-bone: #edeae2;
@@ -522,162 +551,6 @@ footer[id] {
 }
 
 /* The opening signal. */
-.hero {
-  position: relative;
-  padding-top: 135px;
-  min-height: 845px;
-  height: min(920px, 100svh);
-  display: flex;
-  flex-direction: column;
-  background-image: linear-gradient(
-    to right,
-    color-mix(in srgb, var(--line) 20%, transparent) 1px,
-    transparent 1px
-  );
-  background-size: calc((100% - 12.6vw) / 12) 100%;
-  background-position: 6.3vw 0;
-}
-.hero-topline {
-  display: flex;
-  justify-content: space-between;
-  color: var(--muted);
-  font-size: 9px;
-  position: relative;
-  z-index: 3;
-}
-.location {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-}
-.location i {
-  width: 5px;
-  height: 5px;
-  background: var(--accent-text);
-  border-radius: 50%;
-}
-.hero-main {
-  position: relative;
-  flex: 1;
-  display: flex;
-  align-items: center;
-  padding: 25px 0 45px;
-}
-.hero-copy {
-  position: relative;
-  z-index: 3;
-  width: 65%;
-  padding-top: 12px;
-}
-.hero-eyebrow {
-  font-size: 10px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 30px;
-  color: var(--muted);
-}
-.tiny-cross {
-  color: var(--accent-text);
-  font-size: 17px;
-  font-weight: 400;
-}
-.hero h1 {
-  font-size: clamp(100px, 12.9vw, 210px);
-  font-weight: 600;
-  line-height: 0.83;
-  letter-spacing: -0.085em;
-  margin-left: -8px;
-  max-width: fit-content;
-}
-.name-line {
-  display: flex;
-  white-space: nowrap;
-  position: relative;
-}
-.name-line + .name-line {
-  margin-top: 16px;
-}
-.char-mask {
-  display: inline-block;
-  overflow: hidden;
-  padding: 0 0.035em 0.06em 0;
-  margin-right: -0.035em;
-  margin-bottom: -0.06em;
-}
-.hero-char {
-  display: inline-block;
-}
-.accent-name {
-  color: var(--accent-text);
-}
-.name-period {
-  font-size: 1.02em;
-  margin-left: 0.03em;
-  line-height: 0.83;
-}
-.role-ticker {
-  margin-top: 28px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  max-width: 343px;
-  overflow: hidden;
-}
-.ticker-window {
-  overflow: hidden;
-  mask-image: linear-gradient(90deg, #000 85%, transparent);
-}
-.ticker-track {
-  display: flex;
-  white-space: nowrap;
-  width: max-content;
-  animation: ticker 18s linear infinite;
-}
-.ticker-track > span {
-  display: flex;
-  gap: 17px;
-  padding-right: 17px;
-}
-.ticker-slash {
-  color: var(--muted);
-}
-@keyframes ticker {
-  to {
-    transform: translateX(-50%);
-  }
-}
-.hero-intro {
-  font-size: 15px;
-  line-height: 1.7;
-  max-width: 330px;
-  margin-top: 24px;
-  color: var(--muted);
-}
-.hero-actions {
-  display: flex;
-  gap: 28px;
-  align-items: center;
-  margin-top: 26px;
-}
-.hero-actions .text-link {
-  font-size: 11px;
-}
-.hero-actions .button {
-  min-height: 48px;
-  padding: 14px 20px;
-  gap: 35px;
-  font-size: 11px;
-}
-.hero-scene-wrap {
-  position: absolute;
-  z-index: 1;
-  right: -4.3vw;
-  top: 4px;
-  width: 56%;
-  height: 96%;
-  pointer-events: auto;
-}
 .scene-stage {
   position: relative;
   width: 100%;
@@ -701,118 +574,6 @@ footer[id] {
 }
 .scene-stage canvas {
   display: block;
-}
-.network-coordinate {
-  position: absolute;
-  left: 14%;
-  top: 13%;
-  z-index: 2;
-  font-size: 8px;
-  color: var(--muted);
-  line-height: 1.8;
-  opacity: 0.6;
-}
-.scene-cross {
-  position: absolute;
-  width: 17px;
-  height: 17px;
-  color: var(--muted);
-  opacity: 0.65;
-}
-.cross-a {
-  right: 18%;
-  top: 13%;
-}
-.cross-b {
-  left: 12%;
-  bottom: 19%;
-}
-.scene-label {
-  position: absolute;
-  right: 10%;
-  bottom: 15%;
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  color: var(--muted);
-  font-size: 8px;
-}
-.scene-label .signal-dot {
-  width: 4px;
-  height: 4px;
-}
-.scene-hint {
-  position: absolute;
-  bottom: 10%;
-  right: 10%;
-  font-size: 8px;
-  color: var(--muted);
-  opacity: 0.65;
-}
-.hero-note {
-  position: absolute;
-  right: 7%;
-  bottom: 3.5%;
-  z-index: 3;
-  max-width: 230px;
-  font-size: 27px;
-  line-height: 1.1;
-  color: var(--muted);
-  transform: rotate(-8deg);
-}
-.sketch-arrow {
-  position: absolute;
-  width: 100px;
-  height: 72px;
-  left: -100px;
-  top: -4px;
-  transform: rotate(-80deg);
-  color: var(--accent-text);
-}
-.hero-bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-top: 1px solid var(--line);
-  padding-top: 24px;
-  padding-bottom: 25px;
-  gap: 20px;
-}
-.process-list {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  font-size: 9px;
-}
-.process-list > div {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-}
-.process-list > div > span:first-child {
-  color: var(--accent-text);
-  font-size: 8px;
-}
-.process-connector {
-  width: 28px;
-  height: 1px;
-  background: var(--line);
-  margin-left: 8px;
-}
-.scroll-prompt {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  font-size: 8px;
-  color: var(--muted);
-}
-.scroll-prompt svg {
-  animation: scroll-arrow 2s ease-in-out infinite;
-}
-@keyframes scroll-arrow {
-  50% {
-    transform: translateY(4px);
-  }
 }
 
 /* Context and a real record of practice. */
@@ -2774,23 +2535,10 @@ footer[id] {
 }
 
 @media (min-width: 1800px) {
-  .hero {
-    max-height: 1050px;
-    min-height: 950px;
-  }
   .site-header {
     max-width: 1800px;
     left: 50%;
     margin-left: -900px;
-  }
-  .hero-scene-wrap {
-    right: -25px;
-  }
-  .hero h1 {
-    font-size: 230px;
-  }
-  .hero-note {
-    bottom: 7%;
   }
   .signal-rail {
     left: 35px;
@@ -2814,28 +2562,6 @@ footer[id] {
     padding: 11px 17px;
     gap: 15px;
   }
-  .hero {
-    min-height: 790px;
-  }
-  .hero-main {
-    padding-top: 40px;
-  }
-  .hero h1 {
-    font-size: 13vw;
-  }
-  .hero-scene-wrap {
-    right: -5vw;
-    width: 58%;
-    height: 90%;
-    top: 22px;
-  }
-  .hero-eyebrow {
-    font-size: 9px;
-  }
-  .hero-note {
-    right: 3%;
-    font-size: 24px;
-  }
   .contexts {
     gap: 25px;
   }
@@ -2857,15 +2583,6 @@ footer[id] {
   }
   .activity-heading strong {
     font-size: 40px;
-  }
-  .hero-bottom .scroll-prompt {
-    font-size: 7px;
-  }
-  .process-list {
-    gap: 14px;
-  }
-  .process-connector {
-    width: 18px;
   }
   .about-layout {
     gap: 6vw;
@@ -2936,99 +2653,6 @@ footer[id] {
   }
   .signal-rail {
     display: none;
-  }
-  .hero {
-    min-height: 800px;
-    height: auto;
-    padding-top: 125px;
-  }
-  .hero-main {
-    min-height: 565px;
-    padding: 50px 0 60px;
-    align-items: flex-start;
-  }
-  .hero-copy {
-    width: 72%;
-    padding-top: 0;
-  }
-  .hero h1 {
-    font-size: 14.6vw;
-    letter-spacing: -0.08em;
-    margin-left: -5px;
-  }
-  .hero-eyebrow {
-    font-size: 8px;
-    margin-bottom: 30px;
-  }
-  .hero-scene-wrap {
-    right: -16vw;
-    top: 45px;
-    width: 69%;
-    height: 480px;
-    opacity: 0.85;
-  }
-  .hero-note {
-    right: 0%;
-    bottom: 16px;
-    max-width: 200px;
-    font-size: 23px;
-  }
-  .hero-intro {
-    font-size: 14px;
-    max-width: 310px;
-    margin-top: 22px;
-  }
-  .hero-actions {
-    gap: 20px;
-  }
-  .hero-actions .button {
-    padding: 13px 17px;
-    font-size: 10px;
-    gap: 25px;
-  }
-  .hero-actions .text-link {
-    font-size: 10px;
-  }
-  .hero-topline {
-    font-size: 8px;
-  }
-  .hero-bottom {
-    padding-top: 24px;
-    padding-bottom: 24px;
-  }
-  .hero-bottom .scroll-prompt {
-    font-size: 0;
-    gap: 0;
-  }
-  .process-list {
-    gap: 20px;
-    font-size: 8px;
-  }
-  .process-connector {
-    width: 30px;
-  }
-  .role-ticker {
-    margin-top: 24px;
-  }
-  .network-coordinate {
-    left: 25%;
-    top: 5%;
-  }
-  .scene-label {
-    right: 22%;
-    bottom: 13%;
-    font-size: 6px;
-  }
-  .scene-hint {
-    display: none;
-  }
-  .cross-a {
-    right: 29%;
-    top: 13%;
-  }
-  .cross-b {
-    left: 23%;
-    bottom: 15%;
   }
   .built-section {
     padding-top: 75px;
@@ -3517,169 +3141,6 @@ footer[id] {
     font-size: 13px;
     border-bottom: 0;
     padding-top: 15px;
-  }
-  .hero {
-    padding-top: 107px;
-    min-height: 850px;
-    height: auto;
-    background-size: calc((100% - 46px) / 4) 100%;
-    background-position: 23px 0;
-  }
-  .hero-topline {
-    font-size: 7px;
-    gap: 20px;
-  }
-  .location {
-    gap: 6px;
-  }
-  .utc {
-    display: none;
-  }
-  .hero-main {
-    display: block;
-    min-height: 660px;
-    padding-top: 40px;
-    padding-bottom: 0;
-  }
-  .hero-copy {
-    width: 100%;
-    padding: 0;
-  }
-  .hero-eyebrow {
-    font-size: 7px;
-    gap: 8px;
-    margin-bottom: 28px;
-    letter-spacing: 0.025em;
-  }
-  .tiny-cross {
-    font-size: 14px;
-  }
-  .hero h1 {
-    font-size: clamp(76px, 20.7vw, 135px);
-    letter-spacing: -0.085em;
-    margin-left: -4px;
-    position: relative;
-    z-index: 3;
-  }
-  .name-line + .name-line {
-    margin-top: 10px;
-  }
-  .name-period {
-    margin-left: 0.025em;
-  }
-  .role-ticker {
-    margin-top: 21px;
-    font-size: 8px;
-    max-width: 280px;
-    gap: 9px;
-  }
-  .ticker-track > span {
-    gap: 13px;
-    padding-right: 13px;
-  }
-  .hero-scene-wrap {
-    top: 175px;
-    right: -45px;
-    width: 360px;
-    height: 330px;
-    opacity: 0.8;
-    z-index: 1;
-    pointer-events: none;
-  }
-  .hero-scene-wrap .scene-label {
-    right: 27%;
-    bottom: 9%;
-    font-size: 5px;
-  }
-  .hero-scene-wrap .scene-cross {
-    width: 12px;
-    height: 12px;
-  }
-  .network-coordinate {
-    left: 29%;
-    top: 12%;
-    font-size: 6px;
-  }
-  .cross-a {
-    right: 25%;
-    top: 14%;
-  }
-  .cross-b {
-    left: 20%;
-    bottom: 12%;
-  }
-  .hero-intro {
-    font-size: 13px;
-    max-width: 225px;
-    margin-top: 222px;
-    position: relative;
-    z-index: 3;
-  }
-  .hero-actions {
-    margin-top: 21px;
-    gap: 22px;
-    position: relative;
-    z-index: 3;
-  }
-  .hero-actions .button {
-    min-height: 44px;
-    padding: 13px 16px;
-    font-size: 10px;
-    gap: 22px;
-  }
-  .hero-actions .text-link {
-    font-size: 9px;
-    gap: 5px;
-  }
-  .hero-actions .text-link svg {
-    width: 12px;
-    height: 12px;
-  }
-  .hero-note {
-    right: 0;
-    bottom: 161px;
-    max-width: 140px;
-    font-size: 21px;
-    line-height: 0.95;
-    transform: rotate(-9deg);
-    text-align: right;
-  }
-  .sketch-arrow {
-    width: 55px;
-    height: 40px;
-    left: -41px;
-    top: -4px;
-    transform: rotate(-55deg);
-  }
-  .hero-bottom {
-    padding: 22px 0 23px;
-    align-items: center;
-    gap: 10px;
-  }
-  .process-list {
-    gap: 15px;
-    justify-content: space-between;
-    flex: 1;
-  }
-  .process-list > div {
-    gap: 5px;
-    font-size: 7px;
-    white-space: nowrap;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .process-list > div > span:first-child {
-    font-size: 6px;
-  }
-  .process-connector {
-    display: none;
-  }
-  .scroll-prompt {
-    padding-left: 10px;
-  }
-  .scroll-prompt svg {
-    width: 12px;
-    height: 12px;
   }
   .built-section {
     padding-top: 60px;
@@ -4720,7 +4181,7 @@ footer[id] {
   .footer-name-fill {
     clip-path: inset(0) !important;
   }
-  .hero-char,
+
   .split-line {
     transform: none !important;
   }
@@ -4740,17 +4201,6 @@ footer[id] {
   ::view-transition-old(root),
   ::view-transition-new(root) {
     animation: none !important;
-  }
-}
-@media (max-width: 650px) {
-  .hero-note {
-    bottom: 190px;
-    font-size: 19px;
-    max-width: 125px;
-  }
-  .hero-scene-wrap .scene-label,
-  .hero-scene-wrap .network-coordinate {
-    display: none;
   }
 }
 .activity-footer small,

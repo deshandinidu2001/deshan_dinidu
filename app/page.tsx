@@ -1,5 +1,4 @@
-import { Preloader } from "@/components/motion/preloader";
-import { Hero } from "@/components/sections/hero";
+import { Hero } from "@/components/hero/Hero";
 import { BuiltWith } from "@/components/sections/built-with";
 import { ContributionMap } from "@/components/sections/contribution-map";
 import { SelectedWork } from "@/components/sections/selected-work";
@@ -17,7 +16,6 @@ export default async function Home() {
   const data = await getContributions();
   return (
     <>
-      <Preloader />
       <main id="main">
         <Hero />
         <BuiltWith />

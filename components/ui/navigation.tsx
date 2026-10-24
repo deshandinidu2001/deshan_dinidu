@@ -1,11 +1,18 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type MouseEvent,
+} from "react";
 import { ArrowUpRight, Github, Menu, Moon, Sun, X } from "lucide-react";
 import { navigation, profile } from "@/data/profile";
 import { siteCopy } from "@/data/site";
 import { SignalMark } from "./icons";
 import { Magnetic } from "./magnetic";
+import { toggleThemeFromButton } from "@/lib/theme-transition";
 const subscribeTheme = (callback: () => void) => {
   window.addEventListener("theme-change", callback);
   return () => window.removeEventListener("theme-change", callback);
@@ -77,13 +84,8 @@ export function Navigation() {
     window.addEventListener("keydown", escape);
     return () => window.removeEventListener("keydown", escape);
   }, [open]);
-  const toggle = () => {
-    const value = theme === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = value;
-    try {
-      localStorage.setItem("signal-theme", value);
-    } catch {}
-    window.dispatchEvent(new Event("theme-change"));
+  const toggle = (event: MouseEvent<HTMLButtonElement>) => {
+    void toggleThemeFromButton(event.currentTarget);
   };
   return (
     <header className={`site-header ${hidden && !open ? "nav-hidden" : ""}`}>
@@ -111,7 +113,7 @@ export function Navigation() {
         <button
           onClick={toggle}
           className="theme-button"
-          aria-label={siteCopy.ui.theme}
+          aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
         >
           {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
         </button>
@@ -126,7 +128,7 @@ export function Navigation() {
         <button
           onClick={toggle}
           className="theme-button"
-          aria-label={siteCopy.ui.theme}
+          aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
         >
           {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
         </button>

@@ -10,36 +10,14 @@ import {
   Mail,
   X,
 } from "lucide-react";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
 import { profile } from "@/data/profile";
 import { siteCopy } from "@/data/site";
-import { SignalMark } from "@/components/ui/icons";
-import { Magnetic } from "@/components/ui/magnetic";
-import { useScrollMotion } from "@/hooks/use-scroll-motion";
 export function Contact() {
   const ref = useRef<HTMLElement>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const form = useRef<HTMLFormElement>(null);
-  const reduced = useScrollMotion();
   const [copied, setCopied] = useState(false);
   const [feedback, setFeedback] = useState("");
-  useGSAP(
-    () => {
-      if (reduced) return;
-      gsap.to(".footer-name-fill", {
-        clipPath: "inset(0 0% 0 0)",
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".footer-name",
-          start: "top 95%",
-          end: "bottom 75%",
-          scrub: 1,
-        },
-      });
-    },
-    { scope: ref, dependencies: [reduced], revertOnUpdate: true },
-  );
   const getBrief = () => {
     if (!form.current?.reportValidity()) return null;
     const data = new FormData(form.current);
@@ -68,112 +46,80 @@ export function Contact() {
     setFeedback(siteCopy.contact.downloaded);
   };
   return (
-    <footer ref={ref} id="contact" className="contact-section section-shell">
-      <div className="section-kicker mono">
-        <span>{siteCopy.contact.label}</span>
-        <span>{profile.location}</span>
-      </div>
-      <div className="contact-card">
-        <div className="contact-orbits" aria-hidden="true">
-          <i />
-          <i />
-          <i />
-          <SignalMark />
-        </div>
-        <div className="contact-content">
+    <footer
+      ref={ref}
+      id="contact"
+      className="contact-section contact-redesigned section-shell"
+    >
+      <div className="footer-invitation">
+        <div>
+          <span className="mono">Have an idea worth building?</span>
           <h2>
-            {siteCopy.contact.title}
-            <ArrowUpRight strokeWidth={1} />
+            Let’s make
+            <br />
+            something work.
           </h2>
-          <p>{siteCopy.contact.description}</p>
-          <div className="contact-actions">
-            <Magnetic>
-              <button
-                className="button button-primary"
-                onClick={() => {
-                  setCopied(false);
-                  setFeedback("");
-                  dialog.current?.showModal();
-                }}
-              >
-                {siteCopy.contact.cta}
-                <ArrowUpRight size={18} />
-              </button>
-            </Magnetic>
-            {profile.email ? (
-              <a
-                className="button button-outline"
-                href={`mailto:${profile.email}`}
-              >
-                <Mail size={16} />
-                {siteCopy.contact.email}
-              </a>
-            ) : (
-              <button
-                className="button button-outline contact-disabled"
-                disabled
-                title={siteCopy.contact.addressPending}
-              >
-                <Mail size={16} />
-                {siteCopy.contact.email}
-                <small>{siteCopy.ui.soon}</small>
-              </button>
-            )}
-          </div>
-          {!profile.email && (
-            <p className="contact-placeholder">
-              {siteCopy.contact.unavailable}
-            </p>
+          <p className="script footer-note">
+            A good conversation is a good start.
+          </p>
+        </div>
+        <div className="footer-connect">
+          <p>
+            Interfaces, applications, and the systems behind them. Tell me what
+            you have in mind.
+          </p>
+          <button
+            className="footer-brief-button"
+            onClick={() => {
+              setCopied(false);
+              setFeedback("");
+              dialog.current?.showModal();
+            }}
+          >
+            Start a conversation <ArrowUpRight size={25} />
+          </button>
+          {profile.email && (
+            <a className="text-link" href={`mailto:${profile.email}`}>
+              <Mail size={16} />
+              Email me
+            </a>
           )}
         </div>
       </div>
-      <div className="footer-links">
-        <a
-          className="text-link"
-          href={profile.github}
-          target="_blank"
-          rel="noreferrer"
-        >
-          <Github size={15} />
-          {siteCopy.ui.github}
-          <ArrowUpRight size={14} />
+      <div className="footer-directory">
+        <a className="footer-signature" href="#hero">
+          deshan<span>.</span>
         </a>
-        {profile.linkedin ? (
-          <a
-            className="text-link"
-            href={profile.linkedin}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {siteCopy.contact.linkedin}
-            <ArrowUpRight size={14} />
+        <nav aria-label="Footer navigation">
+          {[
+            { label: "Work", href: "#work" },
+            { label: "AI Lab", href: "#ai-lab" },
+            { label: "About", href: "#about" },
+            { label: "Notes", href: "#notes" },
+          ].map((link) => (
+            <a key={link.href} href={link.href}>
+              {link.label}
+            </a>
+          ))}
+          <a href={profile.github} target="_blank" rel="noreferrer">
+            <Github size={15} />
+            GitHub <ArrowUpRight size={13} />
           </a>
-        ) : (
-          <span className="footer-placeholder">
-            {siteCopy.contact.linkedin} <small>{siteCopy.ui.soon}</small>
-          </span>
-        )}
-        <a className="back-top mono" href="#hero">
-          {siteCopy.contact.top}
-          <ArrowUp size={16} />
+          {profile.linkedin && (
+            <a href={profile.linkedin} target="_blank" rel="noreferrer">
+              LinkedIn <ArrowUpRight size={13} />
+            </a>
+          )}
+        </nav>
+        <a className="footer-top" href="#hero">
+          Back to top <ArrowUp size={16} />
         </a>
       </div>
-      <div className="footer-name">
-        <span className="sr-only">{profile.name}</span>
-        <span aria-hidden="true">{profile.name}</span>
-        <span className="footer-name-fill" aria-hidden="true">
-          {profile.name}
-        </span>
-      </div>
-      <div className="footer-bottom mono">
+      <div className="footer-colophon mono">
         <span>
           © {siteCopy.contact.year} {profile.name}
         </span>
-        <span className="footer-thanks">
-          {siteCopy.contact.thanks}
-          <i className="signal-dot" />
-        </span>
-        <span>{siteCopy.concept}</span>
+        <span>Made with curiosity in {profile.location}.</span>
       </div>
       <dialog
         ref={dialog}

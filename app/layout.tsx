@@ -1,14 +1,16 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import { getImageProps } from "next/image";
+import { heroImages, heroImageSizes } from "@/data/hero-images";
 import "lenis/dist/lenis.css";
 import "./globals.css";
 import { MotionProvider } from "@/components/motion/motion-provider";
-import { Cursor } from "@/components/motion/cursor";
 import { Navigation } from "@/components/ui/navigation";
-import { SignalRail } from "@/components/motion/signal-rail";
 import { profile } from "@/data/profile";
 import { siteCopy } from "@/data/site";
 import { RouteComplete } from "@/components/motion/route-complete";
+import { PageProgress } from "@/components/ui/page-progress";
+import "./refinements.css";
 const displayFont = localFont({
   src: "../node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2",
   variable: "--font-space",
@@ -58,6 +60,22 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const heroPreloads = Object.fromEntries(
+    Object.entries(heroImages).map(([theme, pair]) => {
+      return [
+        theme,
+        Object.values(pair).map((src) => {
+          const { props } = getImageProps({
+            src,
+            alt: "",
+            fill: true,
+            sizes: heroImageSizes,
+          });
+          return { src: props.src, srcSet: props.srcSet, sizes: props.sizes };
+        }),
+      ];
+    }),
+  );
   const person = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -82,7 +100,7 @@ export default function RootLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{document.documentElement.dataset.theme=localStorage.getItem('signal-theme')||'dark'}catch(e){}`,
+            __html: `(()=>{let t;try{t=localStorage.getItem('signal-theme')}catch(e){}t=t==='dark'||t==='light'?t:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t;if(location.pathname==='/'){for(const p of ${JSON.stringify(heroPreloads)}[t]){const l=document.createElement('link');l.rel='preload';l.as='image';l.href=p.src;l.imageSrcset=p.srcSet;l.imageSizes=p.sizes;l.fetchPriority='high';document.head.appendChild(l)}}})()`,
           }}
         />
         <script
@@ -99,11 +117,9 @@ export default function RootLayout({
         <MotionProvider>
           <Navigation />
           {children}
-          <SignalRail />
-          <Cursor />
           <RouteComplete />
+          <PageProgress />
         </MotionProvider>
-        <div className="grain" aria-hidden="true" />
       </body>
     </html>
   );
