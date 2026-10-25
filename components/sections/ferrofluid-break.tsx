@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowDownRight, Pause, Play } from "lucide-react";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import BlurText from "@/components/react-bits/BlurText";
+import { FerrofluidFallback } from "@/components/ui/ferrofluid-fallback";
 const Ferrofluid = dynamic(() => import("@/components/react-bits/Ferrofluid"), {
   ssr: false,
 });
@@ -11,6 +12,9 @@ export function FerrofluidBreak() {
   const ref = useRef<HTMLElement>(null),
     [near, setNear] = useState(false),
     [paused, setPaused] = useState(false);
+  const [status, setStatus] = useState<"idle" | "ready" | "unavailable">(
+    "idle",
+  );
   const reduced = useReducedMotion();
   useEffect(() => {
     const el = ref.current;
@@ -34,10 +38,15 @@ export function FerrofluidBreak() {
       className="ferro-break"
       aria-label="An interactive pause before we connect"
     >
-      <div className="ferro-art" aria-hidden="true">
-        {near && (
+      <div className="ferro-art" aria-hidden="true" data-renderer={status}>
+        <FerrofluidFallback
+          active={near && status !== "ready"}
+          paused={paused || reduced}
+        />
+        {near && status !== "unavailable" && (
           <Ferrofluid
             key={reduced ? "still" : "moving"}
+            onStatusChange={setStatus}
             colors={["#c6ff3d", "#e5ebd4", "#658736"]}
             color="#0b0f0d"
             lightMode={false}
@@ -71,7 +80,7 @@ export function FerrofluidBreak() {
             ? "A still moment."
             : "Move across the surface. Click to make a ripple."}
         </span>
-        {!reduced && (
+        {!reduced && near && (
           <button
             type="button"
             onClick={() => setPaused(!paused)}

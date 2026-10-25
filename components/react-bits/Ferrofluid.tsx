@@ -13,6 +13,7 @@ import "./Ferrofluid.css";
 export type FerrofluidFlow = "up" | "down" | "left" | "right" | "none";
 
 export interface FerrofluidProps extends HTMLAttributes<HTMLDivElement> {
+  onStatusChange?: (status: "ready" | "unavailable") => void;
   colors?: string[];
   speed?: number;
   scale?: number;
@@ -497,7 +498,12 @@ const link = (
   const vertex = compile(gl, gl.VERTEX_SHADER, VERTEX);
   const fragment = compile(gl, gl.FRAGMENT_SHADER, fragmentSource);
   const program = gl.createProgram();
-  if (!vertex || !fragment || !program) return null;
+  if (!vertex || !fragment || !program) {
+    if (vertex) gl.deleteShader(vertex);
+    if (fragment) gl.deleteShader(fragment);
+    if (program) gl.deleteProgram(program);
+    return null;
+  }
   gl.attachShader(program, vertex);
   gl.attachShader(program, fragment);
   gl.bindAttribLocation(program, 0, "aPosition");
@@ -545,6 +551,7 @@ const Ferrofluid = ({
   color,
   opacity = 1,
   paused = false,
+  onStatusChange,
   dpr,
   mixBlendMode,
   className = "",
@@ -582,6 +589,10 @@ const Ferrofluid = ({
     dpr,
   };
   const settingsRef = useRef(settings);
+  const statusRef = useRef(onStatusChange);
+  useEffect(() => {
+    statusRef.current = onStatusChange;
+  }, [onStatusChange]);
   useEffect(() => {
     settingsRef.current = settings;
   });
@@ -596,13 +607,22 @@ const Ferrofluid = ({
       depth: false,
       stencil: false,
     });
-    if (!container || !canvas || !gl) return undefined;
+    if (!container || !canvas || !gl) {
+      statusRef.current?.("unavailable");
+      return undefined;
+    }
 
     const floatTargets = Boolean(gl.getExtension("EXT_color_buffer_float"));
     const sim = link(gl, SIM_FRAGMENT);
     const bounds = link(gl, BOUND_FRAGMENT);
     const render = link(gl, RENDER_FRAGMENT);
-    if (!sim || !bounds || !render) return undefined;
+    if (!sim || !bounds || !render) {
+      [sim, bounds, render].forEach((item) => {
+        if (item) gl.deleteProgram(item.program);
+      });
+      statusRef.current?.("unavailable");
+      return undefined;
+    }
 
     const buffer = gl.createBuffer();
     const vao = gl.createVertexArray();
@@ -1019,6 +1039,13 @@ const Ferrofluid = ({
       last = 0;
       wake();
     };
+    const onContextLost = () => {
+      cancelAnimationFrame(raf);
+      raf = 0;
+      visible = false;
+      statusRef.current?.("unavailable");
+    };
+    canvas.addEventListener("webglcontextlost", onContextLost);
 
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(container);
@@ -1037,6 +1064,9 @@ const Ferrofluid = ({
     document.documentElement.addEventListener("pointerleave", onPointerLeave);
     document.addEventListener("visibilitychange", onVisibility);
     resize();
+    statusRef.current?.(
+      gl.getError() === gl.NO_ERROR ? "ready" : "unavailable",
+    );
 
     let lastDpr = settingsRef.current.dpr;
     wakeRef.current = () => {
@@ -1051,6 +1081,7 @@ const Ferrofluid = ({
 
     return () => {
       cancelAnimationFrame(raf);
+      canvas.removeEventListener("webglcontextlost", onContextLost);
       wakeRef.current = null;
       resizeObserver.disconnect();
       intersection.disconnect();

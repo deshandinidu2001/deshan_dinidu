@@ -8,6 +8,7 @@ import { HeroText, HeroNote } from "./HeroText";
 import { CodeCard } from "./cards/CodeCard";
 import { FileTreeCard } from "./cards/FileTreeCard";
 import { AiCard } from "./cards/AiCard";
+import { useHeroEntrance } from "./useHeroEntrance";
 
 const mono = JetBrains_Mono({
   subsets: ["latin"],
@@ -35,6 +36,7 @@ function HeroContent() {
   const theme = useSyncExternalStore(subscribeTheme, readTheme, () => null);
   const { inView, setInView } = useHeroLight();
   const ref = useRef<HTMLElement>(null);
+  useHeroEntrance(ref);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;

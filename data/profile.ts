@@ -5,7 +5,7 @@ export const profile = {
   role: "Full Stack Developer / AI Developer",
   github: "https://github.com/deshandinidu2001",
   username: "deshandinidu2001",
-  email: null as string | null, // TODO: supply public contact email.
+  email: "deshandinidu2001@gmail.com" as string | null,
   linkedin: null as string | null, // TODO: supply LinkedIn URL.
   location: "Sri Lanka",
   tagline: "From ideas to working software.",

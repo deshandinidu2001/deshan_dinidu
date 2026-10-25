@@ -1,5 +1,9 @@
 "use client";
 import { useRef, useState } from "react";
+import Image from "next/image";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import {
   ArrowUp,
   ArrowUpRight,
@@ -18,6 +22,47 @@ export function Contact() {
   const form = useRef<HTMLFormElement>(null);
   const [copied, setCopied] = useState(false);
   const [feedback, setFeedback] = useState("");
+  const reduced = useReducedMotion();
+  useGSAP(
+    () => {
+      if (reduced) return;
+      const tl = gsap.timeline({
+        defaults: { duration: 0.7, ease: "power3.out" },
+        scrollTrigger: { trigger: ref.current, start: "top 85%", once: true },
+      });
+      tl.fromTo(
+        ".footer-invitation-new > div:first-child > .mono",
+        { opacity: 0, y: 15 },
+        { opacity: 1, y: 0 },
+        0,
+      )
+        .fromTo(
+          ".footer-invitation-new h2",
+          { opacity: 0, y: 25, clipPath: "inset(100% 0 0 0)" },
+          { opacity: 1, y: 0, clipPath: "inset(0% 0 0 0)", duration: 0.85 },
+          0.1,
+        )
+        .fromTo(
+          ".footer-note",
+          { opacity: 0, y: 15 },
+          { opacity: 1, y: 0 },
+          0.25,
+        )
+        .fromTo(
+          ".footer-project > *",
+          { opacity: 0, y: 22 },
+          { opacity: 1, y: 0, stagger: 0.12 },
+          0.25,
+        )
+        .fromTo(
+          ".footer-directory,.footer-colophon",
+          { opacity: 0, y: 14 },
+          { opacity: 1, y: 0, stagger: 0.1 },
+          0.5,
+        );
+    },
+    { scope: ref, dependencies: [reduced], revertOnUpdate: true },
+  );
   const getBrief = () => {
     if (!form.current?.reportValidity()) return null;
     const data = new FormData(form.current);
@@ -83,15 +128,19 @@ export function Contact() {
             </span>
           </button>
           {profile.email && (
-            <a className="text-link" href={"mailto:" + profile.email}>
+            <a
+              className="text-link footer-email"
+              href={"mailto:" + profile.email}
+            >
               <Mail size={16} />
-              Email me
+              {profile.email}
             </a>
           )}
         </div>
       </div>
       <div className="footer-directory">
         <a className="footer-signature" href="#hero">
+          <Image src="/images/Profile.jpg" width={40} height={40} alt="" />
           deshan<span>.</span>
         </a>
         <nav aria-label="Footer navigation">

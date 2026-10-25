@@ -1,6 +1,6 @@
 export const siteCopy = {
   concept: "SIGNAL → SYSTEM",
-  title: "Deshan Dinidu — Signal → System",
+  title: "Deshan Dinidu, Computer Engineer",
   description:
     "Full stack developer and AI developer. Web, mobile, backend, and the connections between them. Explore Deshan Dinidu's selected projects and experiments.",
   hero: {
@@ -193,7 +193,7 @@ export const siteCopy = {
       "Contact details are coming soon. You can find my work on GitHub.",
     briefTitle: "Start with an idea.",
     briefIntro:
-      "Write a few details. Copy your brief, or open it in your email app once a contact address is added.",
+      "Write a few details, then copy your brief or open it in your email app.",
     name: "Your name",
     project: "What are you building?",
     message: "What should it do?",

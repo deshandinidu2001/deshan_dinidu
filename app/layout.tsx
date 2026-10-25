@@ -12,6 +12,7 @@ import { RouteComplete } from "@/components/motion/route-complete";
 import { PageProgress } from "@/components/ui/page-progress";
 import "./refinements.css";
 import "./redesign.css";
+import "./experience.css";
 const displayFont = localFont({
   src: "../node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2",
   variable: "--font-space",
@@ -34,14 +35,17 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
   ),
-  title: { default: siteCopy.title, template: "%s — Deshan Dinidu" },
+  title: {
+    default: siteCopy.title,
+    template: "%s — Deshan Dinidu, Computer Engineer",
+  },
   description: siteCopy.description,
   authors: [{ name: profile.name, url: profile.github }],
   creator: profile.name,
   openGraph: {
     type: "website",
     locale: "en_US",
-    siteName: profile.name,
+    siteName: siteCopy.title,
     title: siteCopy.title,
     description: siteCopy.description,
   },
@@ -101,7 +105,7 @@ export default function RootLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(()=>{let t;try{t=localStorage.getItem('signal-theme')}catch(e){}t=t==='dark'||t==='light'?t:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t;if(location.pathname==='/'){for(const p of ${JSON.stringify(heroPreloads)}[t]){const l=document.createElement('link');l.rel='preload';l.as='image';l.href=p.src;l.imageSrcset=p.srcSet;l.imageSizes=p.sizes;l.fetchPriority='high';document.head.appendChild(l)}}})()`,
+            __html: `(()=>{let t;try{t=localStorage.getItem('signal-theme')}catch(e){}t=t==='dark'||t==='light'?t:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t;document.documentElement.dataset.intro=location.pathname==='/'&&(!location.hash||location.hash==='#hero')&&!matchMedia('(prefers-reduced-motion: reduce)').matches?'loading':'done';if(location.pathname==='/'){for(const p of ${JSON.stringify(heroPreloads)}[t]){const l=document.createElement('link');l.rel='preload';l.as='image';l.href=p.src;l.imageSrcset=p.srcSet;l.imageSizes=p.sizes;l.fetchPriority='high';document.head.appendChild(l)}}})()`,
           }}
         />
         <script

@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import {
   useEffect,
   useRef,
@@ -10,7 +11,6 @@ import {
 import { ArrowUpRight, Github, Menu, Moon, Sun, X } from "lucide-react";
 import { navigation, profile } from "@/data/profile";
 import { siteCopy } from "@/data/site";
-import { SignalMark } from "./icons";
 import { Magnetic } from "./magnetic";
 import { toggleThemeFromButton } from "@/lib/theme-transition";
 const subscribeTheme = (callback: () => void) => {
@@ -59,7 +59,7 @@ function Scramble({ text }: { text: string }) {
   );
 }
 export function Navigation() {
-  const [hidden, setHidden] = useState(false);
+  const [compact, setCompact] = useState(false);
   const [open, setOpen] = useState(false);
   const theme = useSyncExternalStore(
     subscribeTheme,
@@ -67,12 +67,10 @@ export function Navigation() {
     () => "dark",
   );
   useEffect(() => {
-    let last = 0;
     const onScroll = () => {
-      const y = window.scrollY;
-      setHidden(y > last && y > 160);
-      last = y;
+      setCompact(window.scrollY > 100);
     };
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -88,59 +86,75 @@ export function Navigation() {
     void toggleThemeFromButton(event.currentTarget);
   };
   return (
-    <header className={`site-header ${hidden && !open ? "nav-hidden" : ""}`}>
-      <Link href="/" className="brand" aria-label={`${profile.name} home`}>
-        <SignalMark />
-        <span>
-          deshan<span className="brand-dot">.</span>
-        </span>
-      </Link>
-      <nav className="desktop-nav" aria-label={siteCopy.ui.mainNav}>
-        {navigation.map((item) => (
-          <Link key={item.label} href={item.href}>
-            <Scramble text={item.label} />
-          </Link>
-        ))}
-        <span className="nav-divider" />
-        <a
-          href={profile.github}
-          target="_blank"
-          rel="noreferrer"
-          aria-label="GitHub (opens in a new tab)"
-        >
-          <Github size={15} />
-        </a>
-        <button
-          onClick={toggle}
-          className="theme-button"
-          aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-        >
-          {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
-        </button>
-      </nav>
-      <Magnetic>
-        <Link className="nav-cta" href="/#contact">
-          {siteCopy.ui.talk}
-          <ArrowUpRight size={16} />
+    <header className="site-header" data-compact={compact}>
+      <div className="header-dock">
+        <Link href="/" className="brand" aria-label={`${profile.name} home`}>
+          <Image
+            className="brand-portrait"
+            src="/images/Profile.jpg"
+            width={38}
+            height={38}
+            alt=""
+            priority
+          />
+          <span className="brand-name-short">
+            deshan<span className="brand-dot">.</span>
+          </span>
+          <span className="brand-name-full">
+            deshan dinidu<span className="brand-dot">.</span>
+          </span>
         </Link>
-      </Magnetic>
-      <div className="mobile-controls">
-        <button
-          onClick={toggle}
-          className="theme-button"
-          aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-        >
-          {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
-        </button>
-        <button
-          className="menu-button"
-          onClick={() => setOpen(!open)}
-          aria-expanded={open}
-          aria-controls="mobile-navigation"
-          aria-label={open ? siteCopy.ui.closeMenu : siteCopy.ui.menu}
-        >
-          {open ? <X /> : <Menu />}
-        </button>
+        <nav className="desktop-nav" aria-label={siteCopy.ui.mainNav}>
+          {navigation.map((item) => (
+            <Link key={item.label} href={item.href}>
+              <Scramble text={item.label} />
+            </Link>
+          ))}
+          <span className="nav-divider" />
+          <a
+            href={profile.github}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="GitHub (opens in a new tab)"
+          >
+            <Github size={15} />
+          </a>
+          <button
+            onClick={toggle}
+            className="theme-button"
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
+          >
+            {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+          </button>
+        </nav>
+        <Magnetic>
+          <Link
+            className="nav-cta"
+            href="/#contact"
+            aria-label={siteCopy.ui.talk}
+          >
+            <span className="nav-cta-label">{siteCopy.ui.talk}</span>
+            <ArrowUpRight size={16} />
+          </Link>
+        </Magnetic>
+        <div className="mobile-controls">
+          <button
+            onClick={toggle}
+            className="theme-button"
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
+          >
+            {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+          <button
+            className="menu-button"
+            onClick={() => setOpen(!open)}
+            aria-expanded={open}
+            aria-controls="mobile-navigation"
+            aria-label={open ? siteCopy.ui.closeMenu : siteCopy.ui.menu}
+          >
+            {open ? <X /> : <Menu />}
+          </button>
+        </div>
       </div>
       {open && (
         <nav

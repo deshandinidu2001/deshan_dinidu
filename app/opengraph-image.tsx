@@ -1,7 +1,6 @@
 import { ImageResponse } from "next/og";
 import { profile } from "@/data/profile";
-export const alt =
-  "Deshan Dinidu — Full Stack Developer / AI Developer. Signal to System.";
+export const alt = "Deshan Dinidu, Computer Engineer";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export default function Image() {
@@ -26,8 +25,8 @@ export default function Image() {
           letterSpacing: 3,
         }}
       >
-        <span>FULL STACK / AI DEVELOPER</span>
-        <span>SIGNAL → SYSTEM</span>
+        <span>COMPUTER ENGINEER</span>
+        <span>DESHAN DINIDU</span>
       </div>
       <div
         style={{

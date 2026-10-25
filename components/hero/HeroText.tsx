@@ -3,31 +3,14 @@ import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { profile } from "@/data/profile";
 import { siteCopy } from "@/data/site";
 import { HERO_COPY } from "./config";
+import { PixelName } from "./PixelName";
 export function HeroText() {
   return (
     <div className="hero-text-anchor">
       <div className="hero-text-scroll">
         <div className="hero-text">
           <p className="hero-eyebrow">{HERO_COPY.label}</p>
-          <h1 aria-label={profile.name}>
-            {[profile.firstName, profile.lastName].map((name, i) => (
-              <span
-                className={`hero-name-line ${i ? "hero-accent-name" : ""}`}
-                aria-hidden="true"
-                key={name}
-              >
-                {name
-                  .toUpperCase()
-                  .split("")
-                  .map((letter, j) => (
-                    <span className="hero-letter" key={j}>
-                      {letter}
-                    </span>
-                  ))}
-                {i === 1 && <span className="hero-period">.</span>}
-              </span>
-            ))}
-          </h1>
+          <PixelName />
           <div
             className="hero-degree"
             role="group"

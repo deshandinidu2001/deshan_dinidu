@@ -9,11 +9,14 @@ import { About } from "@/components/sections/about";
 import { FerrofluidBreak } from "@/components/sections/ferrofluid-break";
 import { Contact } from "@/components/sections/contact";
 import { getContributions } from "@/lib/contributions";
+import { HomeIntro } from "@/components/motion/home-intro";
+import { SketchThought } from "@/components/sections/sketch-thought";
 export const revalidate = 3600;
 export default async function Home() {
   const data = await getContributions();
   return (
     <>
+      <HomeIntro />
       <main id="main">
         <Hero />
         <BuiltWith />
@@ -22,6 +25,7 @@ export default async function Home() {
         <ProcessStrip />
         <AILab />
         <Capabilities />
+        <SketchThought />
         <About />
         <FerrofluidBreak />
       </main>
