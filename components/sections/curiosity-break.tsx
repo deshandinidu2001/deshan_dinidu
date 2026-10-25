@@ -4,11 +4,15 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowDownRight, Pause, Play } from "lucide-react";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import BlurText from "@/components/react-bits/BlurText";
-import { FerrofluidFallback } from "@/components/ui/ferrofluid-fallback";
-const Ferrofluid = dynamic(() => import("@/components/react-bits/Ferrofluid"), {
-  ssr: false,
-});
-export function FerrofluidBreak() {
+import { AsciiNameFallback } from "@/components/ui/ascii-name-fallback";
+
+const GradientASCII = dynamic(
+  () => import("@/components/react-bits/GradientASCII"),
+  { ssr: false },
+);
+const name = "DESHAN\nDINIDU";
+
+export function CuriosityBreak() {
   const ref = useRef<HTMLElement>(null),
     [near, setNear] = useState(false),
     [paused, setPaused] = useState(false);
@@ -17,8 +21,6 @@ export function FerrofluidBreak() {
   );
   const reduced = useReducedMotion();
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -28,43 +30,54 @@ export function FerrofluidBreak() {
       },
       { rootMargin: "250px" },
     );
-    observer.observe(el);
+    observer.observe(ref.current!);
     return () => observer.disconnect();
   }, []);
   return (
     <section
       ref={ref}
       id="curiosity"
-      className="ferro-break"
-      aria-label="An interactive pause before we connect"
+      className="curiosity-break"
+      aria-label="A little room for curiosity"
     >
-      <div className="ferro-art" aria-hidden="true" data-renderer={status}>
-        <FerrofluidFallback
+      <div
+        className="curiosity-art"
+        data-renderer={status}
+        role="img"
+        aria-label="DESHAN DINIDU in gradient ASCII lettering"
+      >
+        <AsciiNameFallback
+          text={name}
           active={near && status !== "ready"}
-          paused={paused || reduced}
+          paused={paused}
+          reduced={reduced}
         />
         {near && status !== "unavailable" && (
-          <Ferrofluid
+          <GradientASCII
             key={reduced ? "still" : "moving"}
             onStatusChange={setStatus}
-            colors={["#c6ff3d", "#e5ebd4", "#658736"]}
-            color="#0b0f0d"
-            lightMode={false}
-            transparent={false}
-            speed={0.32}
-            scale={1.5}
-            spikeHeight={0.8}
-            turbulence={0.6}
-            brightness={0.8}
-            dpr={0.8}
+            text={name}
+            colors={["#79a629", "#c6ff3d", "#edeae0"]}
+            cellSize={12}
+            density={1}
+            glyphOpacity={1}
+            gradientOpacity={0}
+            glow={0}
+            grain={0}
+            depthOfField={0}
+            flicker={0.08}
+            speed={0.35}
+            flow={0.2}
             intro={false}
             paused={paused || reduced}
-            mouseInteraction={!reduced && !paused}
-            clickPulse={!reduced && !paused}
+            mouseInteraction={!paused && !reduced}
+            scrambleRadius={0.16}
+            clickEffect="burst"
+            dpr={1}
           />
         )}
       </div>
-      <div className="ferro-caption">
+      <div className="curiosity-caption">
         <span className="mono">A little room for curiosity</span>
         <h2>
           <BlurText text="Keep exploring." />
@@ -74,18 +87,18 @@ export function FerrofluidBreak() {
           Let’s make the next one <ArrowDownRight size={19} />
         </a>
       </div>
-      <div className="ferro-controls">
+      <div className="curiosity-controls">
         <span className="mono">
           {reduced
-            ? "A still moment."
-            : "Move across the surface. Click to make a ripple."}
+            ? "Every character finds its place."
+            : "Move over the letters. Watch them find their way back."}
         </span>
         {!reduced && near && (
           <button
             type="button"
             onClick={() => setPaused(!paused)}
             aria-label={
-              paused ? "Resume fluid animation" : "Pause fluid animation"
+              paused ? "Resume ASCII animation" : "Pause ASCII animation"
             }
           >
             {paused ? <Play size={14} /> : <Pause size={14} />}

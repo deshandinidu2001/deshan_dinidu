@@ -334,12 +334,26 @@ html[data-intro="loading"] .page-progress {
 }
 .thought-journey {
   position: relative;
+  overflow: clip;
 }
-.thought-journey[data-flight="pinned"] .sketch-thought {
-  height: 100svh;
-  min-height: 0;
-  max-height: none;
-  padding-block: 120px 80px;
+.thought-journey .profile-section {
+  padding-top: 30px;
+  margin-top: -45px;
+}
+.profile-rocket-landing {
+  height: 145px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  margin-top: 15px;
+}
+.profile-rocket-landing > svg {
+  width: 130px;
+  color: var(--accent-text);
+  transform: rotate(-10deg);
+}
+.thought-journey[data-flight] .profile-rocket-landing > svg {
+  visibility: hidden;
 }
 .thought-flight-route {
   position: absolute;
@@ -368,36 +382,13 @@ html[data-intro="loading"] .page-progress {
   width: 100%;
   display: block;
 }
-.thought-flight-note {
-  position: absolute;
-  left: 54%;
-  top: 68%;
-  font-size: clamp(23px, 2.4vw, 36px);
-  color: var(--accent-text);
-  opacity: 0;
-  pointer-events: none;
-}
-.thought-flight-note > .mono {
-  display: block;
-  font-size: 10px;
-  color: var(--muted);
-  margin-top: 15px;
-}
 .thought-journey:not([data-flight]) .thought-rocket {
-  left: auto;
-  top: 57%;
-  right: 5%;
+  display: none;
 }
 .thought-journey:not([data-flight]) .thought-flight-route {
   display: none;
 }
 @media (max-width: 1023px), (max-height: 739px) {
-  .thought-flight-note {
-    left: 47%;
-    top: 72%;
-    max-width: 180px;
-    font-size: 24px;
-  }
   .thought-rocket {
     width: 80px;
   }
@@ -743,33 +734,53 @@ html[data-intro="loading"] .page-progress {
   top: 55%;
   transform: rotate(8deg);
 }
-.ferro-art {
-  background: #0b0f0d;
-}
 .contact-redesigned {
   background: var(--hero-bg);
 }
-.ferro-fallback {
+.curiosity-art {
+  inset: 0 0 0 34%;
+  z-index: 0;
+  mask-image: none;
+}
+.curiosity-caption {
+  z-index: 1;
+}
+.ascii-name-fallback,
+.curiosity-art .gradient-ascii-container {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  display: block;
-  opacity: 1;
-  transition: opacity 0.35s;
+  transition: opacity 0.25s;
 }
-.ferro-art .ferrofluid-container {
-  position: absolute;
-  inset: 0;
+.curiosity-art .gradient-ascii-container {
   opacity: 0;
-  background: #0b0f0d;
-  transition: opacity 0.35s;
 }
-.ferro-art[data-renderer="ready"] .ferrofluid-container {
+.curiosity-art[data-renderer="ready"] .gradient-ascii-container {
   opacity: 1;
 }
-.ferro-art[data-renderer="ready"] .ferro-fallback {
+.curiosity-art[data-renderer="ready"] .ascii-name-fallback {
   opacity: 0;
+  pointer-events: none;
+}
+.curiosity-controls {
+  z-index: 2;
+}
+@media (max-width: 900px) {
+  .curiosity-art {
+    inset: 15% 0 0 31%;
+  }
+}
+@media (max-width: 600px) {
+  .curiosity-break {
+    min-height: 790px;
+    max-height: none;
+  }
+  .curiosity-art {
+    inset: auto 0 65px;
+    height: 340px;
+    mask-image: none;
+  }
 }
 @media (max-width: 1200px) {
   .capabilities-doodle {
@@ -1006,9 +1017,54 @@ html[data-intro="loading"] .page-progress {
     stroke-dashoffset: 0 !important;
   }
   .service-card-wash,
-  .service-card-hint,
-  .ferro-fallback,
-  .ferrofluid-container {
+  .service-card-hint {
     transition: none !important;
+  }
+}
+@media (min-width: 1024px) {
+  .capabilities-doodle-left {
+    left: max(0px, calc(50% - 460px));
+    top: 51%;
+    width: 115px;
+  }
+  .capabilities-doodle-right {
+    right: max(0px, calc(50% - 460px));
+    top: 55%;
+    width: 115px;
+  }
+  .thought-sketch-left {
+    left: max(20px, calc(50% - 500px));
+    top: 39%;
+    width: 115px;
+  }
+}
+@media (max-width: 767px) {
+  .thought-journey .profile-section {
+    margin-top: -25px;
+    padding-top: 20px;
+  }
+  .profile-rocket-landing {
+    height: 100px;
+    margin-top: 8px;
+  }
+  .profile-rocket-landing > svg {
+    width: 90px;
+  }
+}
+@media (max-width: 600px) {
+  .capabilities-doodle-left {
+    top: 20%;
+    left: 0;
+    width: 70px;
+  }
+  .capabilities-doodle-right {
+    bottom: 65px;
+    right: 0;
+    width: 75px;
+  }
+  .thought-sketch-left {
+    top: calc(50% - 190px);
+    left: 5px;
+    width: 60px;
   }
 }

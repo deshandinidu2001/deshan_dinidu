@@ -6,7 +6,7 @@ import { ProcessStrip } from "@/components/sections/process-strip";
 import { AILab } from "@/components/sections/ai-lab";
 import { Capabilities } from "@/components/sections/capabilities";
 import { About } from "@/components/sections/about";
-import { FerrofluidBreak } from "@/components/sections/ferrofluid-break";
+import { CuriosityBreak } from "@/components/sections/curiosity-break";
 import { Contact } from "@/components/sections/contact";
 import { getContributions } from "@/lib/contributions";
 import { HomeIntro } from "@/components/motion/home-intro";
@@ -28,7 +28,7 @@ export default async function Home() {
         <SketchThought>
           <About />
         </SketchThought>
-        <FerrofluidBreak />
+        <CuriosityBreak />
       </main>
       <Contact />
     </>

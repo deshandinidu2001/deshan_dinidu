@@ -509,7 +509,7 @@ html[data-theme-transition]::view-transition {
   margin-top: 18px;
   max-width: 400px;
 }
-.ferro-break {
+.curiosity-break {
   --hero-bg: #0b0f0d;
   --fg: #edeae0;
   --muted: #b6beb2;
@@ -526,29 +526,29 @@ html[data-theme-transition]::view-transition {
   background: var(--hero-bg);
   margin-top: 30px;
 }
-.ferro-art {
+.curiosity-art {
   position: absolute;
   inset: 0 0 0 24%;
   z-index: -1;
   mask-image: linear-gradient(to right, transparent, #000 25%);
 }
-.ferro-caption {
+.curiosity-caption {
   position: relative;
   margin: 80px clamp(28px, 6.3vw, 112px) 100px;
   max-width: 450px;
   pointer-events: none;
 }
-.ferro-caption > .mono {
+.curiosity-caption > .mono {
   font-size: 10px;
   color: var(--muted);
 }
-.ferro-caption h2 {
+.curiosity-caption h2 {
   font-size: clamp(56px, 6.8vw, 104px);
   letter-spacing: -0.065em;
   line-height: 1;
   margin-top: 28px;
 }
-.ferro-caption > .script {
+.curiosity-caption > .script {
   font-size: 29px;
   line-height: 1.2;
   color: var(--accent-text);
@@ -556,7 +556,7 @@ html[data-theme-transition]::view-transition {
   margin-top: 35px;
   max-width: 350px;
 }
-.ferro-caption > a {
+.curiosity-caption > a {
   pointer-events: auto;
   display: inline-flex;
   align-items: center;
@@ -565,7 +565,7 @@ html[data-theme-transition]::view-transition {
   min-height: 44px;
   margin-top: 35px;
 }
-.ferro-controls {
+.curiosity-controls {
   position: absolute;
   bottom: 28px;
   left: clamp(28px, 6.3vw, 112px);
@@ -575,11 +575,11 @@ html[data-theme-transition]::view-transition {
   align-items: center;
   gap: 20px;
 }
-.ferro-controls > .mono {
+.curiosity-controls > .mono {
   font-size: 9px;
   color: var(--muted);
 }
-.ferro-controls > button {
+.curiosity-controls > button {
   display: grid;
   place-items: center;
   min-width: 44px;
@@ -679,7 +679,7 @@ html[data-theme-transition]::view-transition {
     width: 130px;
     height: 130px;
   }
-  .ferro-caption {
+  .curiosity-caption {
     max-width: 380px;
   }
 }
@@ -725,10 +725,10 @@ html[data-theme-transition]::view-transition {
     max-width: 760px;
     width: 100%;
   }
-  .ferro-caption {
+  .curiosity-caption {
     max-width: 340px;
   }
-  .ferro-art {
+  .curiosity-art {
     left: 15%;
   }
 }
@@ -898,38 +898,38 @@ html[data-theme-transition]::view-transition {
   .lab-disclosure {
     font-size: 9px;
   }
-  .ferro-break {
+  .curiosity-break {
     min-height: 650px;
     height: 85svh;
     max-height: 800px;
   }
-  .ferro-caption {
+  .curiosity-caption {
     margin: 55px 24px 0;
     max-width: 310px;
   }
-  .ferro-caption h2 {
+  .curiosity-caption h2 {
     font-size: 64px;
     max-width: 290px;
   }
-  .ferro-caption > .script {
+  .curiosity-caption > .script {
     font-size: 26px;
     max-width: 240px;
     margin-top: 22px;
   }
-  .ferro-caption > a {
+  .curiosity-caption > a {
     margin-top: 24px;
     font-size: 12px;
   }
-  .ferro-art {
+  .curiosity-art {
     inset: 22% -25% 0 0;
     mask-image: linear-gradient(to bottom, transparent, #000 25%);
   }
-  .ferro-controls {
+  .curiosity-controls {
     left: 24px;
     right: 24px;
     bottom: 24px;
   }
-  .ferro-controls > .mono {
+  .curiosity-controls > .mono {
     max-width: 240px;
     font-size: 8px;
   }

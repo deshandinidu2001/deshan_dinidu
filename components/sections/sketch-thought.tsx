@@ -17,135 +17,125 @@ export function SketchThought({ children }: { children: ReactNode }) {
       const root = ref.current!,
         stage = root.querySelector<HTMLElement>(".sketch-thought")!,
         rocket = root.querySelector<HTMLElement>(".thought-rocket")!,
+        routeSvg = root.querySelector<SVGSVGElement>(".thought-flight-route")!,
         route = root.querySelector<SVGPathElement>(".thought-flight-path")!,
         about = root.querySelector<HTMLElement>(".profile-section")!,
-        portrait = root.querySelector<HTMLElement>(".profile-portrait")!;
-      const mm = gsap.matchMedia();
-      mm.add(
+        portrait = root.querySelector<HTMLElement>(".profile-portrait")!,
+        landing = root.querySelector<HTMLElement>(".profile-rocket-landing")!;
+      root.dataset.flight = "flowing";
+      const flight = { progress: 0 };
+      let length = 1;
+      const localCenter = (element: HTMLElement) => {
+        let x = element.offsetWidth / 2,
+          y = element.offsetHeight / 2;
+        let current: HTMLElement | null = element;
+        while (current && current !== root) {
+          x += current.offsetLeft;
+          y += current.offsetTop;
+          current = current.offsetParent as HTMLElement | null;
+        }
+        return { x, y };
+      };
+      const placeRocket = () => {
+        const distance = flight.progress * length,
+          point = route.getPointAtLength(distance),
+          ahead = route.getPointAtLength(Math.min(length, distance + 1)),
+          behind = route.getPointAtLength(Math.max(0, distance - 1)),
+          angle =
+            (Math.atan2(ahead.y - behind.y, ahead.x - behind.x) * 180) /
+              Math.PI +
+            40,
+          settle = gsap.utils.clamp(0, 1, (flight.progress - 0.8) / 0.2);
+        gsap.set(rocket, {
+          x: point.x,
+          y: point.y,
+          rotation: angle * (1 - settle) - 10 * settle,
+          scale:
+            1 +
+            Math.sin(flight.progress * Math.PI) * 0.65 +
+            flight.progress * 0.15,
+          xPercent: -50,
+          yPercent: -50,
+        });
+        route.style.strokeDashoffset = String((1 - flight.progress) * length);
+      };
+      const measureRoute = () => {
+        const width = root.clientWidth,
+          height = root.clientHeight,
+          thoughtHeight = stage.offsetHeight,
+          end = localCenter(landing),
+          startX = Math.min(
+            width - 80,
+            width / 2 + (width > 1000 ? 430 : width * 0.3),
+          ),
+          startY = thoughtHeight * 0.59,
+          left = Math.max(width * 0.06, width > 1000 ? 140 : 95);
+        routeSvg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+        route.setAttribute(
+          "d",
+          `M${startX} ${startY} C${startX + width * 0.04} ${startY + 110}, ${width * 0.75} ${thoughtHeight * 0.95}, ${width * 0.52} ${thoughtHeight * 0.92} S${left} ${thoughtHeight * 0.96}, ${left} ${thoughtHeight + 80} C${left} ${end.y - 90}, ${end.x - 80} ${end.y}, ${end.x} ${end.y}`,
+        );
+        length = route.getTotalLength();
+        route.style.strokeDasharray = String(length);
+        placeRocket();
+      };
+      measureRoute();
+      gsap
+        .timeline({
+          scrollTrigger: {
+            id: "thought-flight",
+            trigger: stage,
+            start: "top 12%",
+            endTrigger: landing,
+            end: "center 75%",
+            scrub: 0.45,
+            invalidateOnRefresh: true,
+            onRefresh: measureRoute,
+          },
+        })
+        .to(
+          flight,
+          { progress: 1, duration: 1, ease: "none", onUpdate: placeRocket },
+          0,
+        )
+        .to(
+          ".sketch-thought-copy",
+          { opacity: 0.12, y: -25, duration: 0.6 },
+          0.15,
+        )
+        .to(".thought-sketch-left", { opacity: 0, duration: 0.5 }, 0.15)
+        .to(route, { opacity: 0.15, duration: 0.2 }, 0.8);
+      // The profile enters during the flight. Nothing is held in an empty pin.
+      gsap.fromTo(
+        portrait,
+        { opacity: 0.15, y: 35, scale: 0.97 },
         {
-          desktop: "(min-width:1024px) and (min-height:740px)",
-          flowing: "(max-width:1023px), (max-height:739px)",
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: about,
+            start: "top 100%",
+            end: "top 35%",
+            scrub: 0.4,
+          },
         },
-        (context) => {
-          const desktop = Boolean(context.conditions?.desktop);
-          root.dataset.flight = desktop ? "pinned" : "flowing";
-          const flight = { progress: 0 };
-          const length = route.getTotalLength();
-          const placeRocket = () => {
-            const distance = flight.progress * length,
-              point = route.getPointAtLength(distance),
-              ahead = route.getPointAtLength(Math.min(length, distance + 1)),
-              behind = route.getPointAtLength(Math.max(0, distance - 1)),
-              width = stage.clientWidth,
-              height = stage.clientHeight,
-              angle =
-                (Math.atan2(
-                  ((ahead.y - behind.y) * height) / 700,
-                  ((ahead.x - behind.x) * width) / 1000,
-                ) *
-                  180) /
-                  Math.PI +
-                22;
-            gsap.set(rocket, {
-              x: (point.x * width) / 1000,
-              y: (point.y * height) / 700,
-              rotation: angle,
-              scale: 1 + flight.progress * (desktop ? 1.7 : 0.5),
-              xPercent: -50,
-              yPercent: -50,
-            });
-          route.style.strokeDashoffset = String((1 - flight.progress) * length);
-          };
-        gsap.set(route, { strokeDasharray: length, strokeDashoffset: length });
-          placeRocket();
-          const timeline = gsap.timeline({
-            scrollTrigger: {
-              id: "thought-flight",
-              trigger: stage,
-              start: desktop ? "top top" : "top 25%",
-              end: desktop
-                ? () => `+=${window.innerHeight * 1.25}`
-                : "bottom 20%",
-              pin: desktop,
-              pinType: "transform",
-              scrub: 0.65,
-              anticipatePin: 1,
-              invalidateOnRefresh: true,
-              onRefresh: placeRocket,
-            },
-          });
-          timeline
-            .to({}, { duration: 0.2 })
-            .to(flight, {
-              progress: 1,
-              duration: 1.8,
-              ease: "none",
-              onUpdate: placeRocket,
-            })
-            .to(
-              ".sketch-thought-copy",
-              { opacity: 0, y: -35, duration: 0.8 },
-              0.65,
-            )
-            .to(".thought-sketch-left", { opacity: 0, duration: 0.6 }, 0.65)
-            .fromTo(
-              ".thought-flight-note",
-              { opacity: 0, y: 15 },
-              { opacity: 1, y: 0, duration: 0.4 },
-              1.2,
-            );
-
-          // Keep the profile in normal flow so direct #about links still work.
-          gsap.fromTo(
-            portrait,
-            {
-              opacity: 0,
-              y: 75,
-              scale: 0.94,
-              clipPath: "inset(10% 6% 0 6% round 22px)",
-            },
-            {
-              opacity: 1,
-              y: 0,
-              scale: 1,
-              clipPath: "inset(0% 0% 0 0% round 22px)",
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: about,
-                start: "top 85%",
-                end: "top 18%",
-                scrub: 0.5,
-              },
-            },
-          );
-          gsap.fromTo(
-            root.querySelectorAll(".profile-story > *"),
-            { opacity: 0, y: 30 },
-            {
-              opacity: 1,
-              y: 0,
-              stagger: 0.12,
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: about,
-                start: "top 73%",
-                end: "top 10%",
-                scrub: 0.5,
-              },
-            },
-          );
-          gsap.to([rocket, route, root.querySelector(".thought-flight-note")], {
-            opacity: 0,
-            scrollTrigger: {
-              trigger: about,
-              start: "top 96%",
-              end: "top 66%",
-              scrub: true,
-            },
-          });
-          return () => {
-            delete root.dataset.flight;
-          };
+      );
+      gsap.fromTo(
+        root.querySelectorAll(".profile-story > *"),
+        { opacity: 0.15, y: 25 },
+        {
+          opacity: 1,
+          y: 0,
+          stagger: 0.08,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: about,
+            start: "top 98%",
+            end: "top 22%",
+            scrub: 0.4,
+          },
         },
       );
       gsap.fromTo(
@@ -160,7 +150,10 @@ export function SketchThought({ children }: { children: ReactNode }) {
       const refresh = requestAnimationFrame(() => ScrollTrigger.refresh());
       return () => {
         cancelAnimationFrame(refresh);
-        mm.revert();
+        delete root.dataset.flight;
+        rocket.style.removeProperty("transform");
+        route.style.removeProperty("stroke-dasharray");
+        route.style.removeProperty("stroke-dashoffset");
       };
     },
     { scope: ref, dependencies: [reduced], revertOnUpdate: true },
@@ -200,26 +193,14 @@ export function SketchThought({ children }: { children: ReactNode }) {
           kind="idea"
           className="thought-sketch thought-sketch-left"
         />
-        <svg
-          className="thought-flight-route"
-          viewBox="0 0 1000 700"
-          preserveAspectRatio="none"
-          fill="none"
-          aria-hidden="true"
-        >
-          <path
-            className="thought-flight-path"
-            d="M880 440C970 260 720 110 500 180S90 340 250 545C285 595 345 610 370 640"
-          />
-        </svg>
-        <div className="thought-rocket" aria-hidden="true">
-          <DrawnSketch kind="plane" showTrail={false} />
-        </div>
-        <p className="thought-flight-note script">
-          Follow the curiosity.<span className="mono">A little about me ↓</span>
-        </p>
       </section>
       {children}
+      <svg className="thought-flight-route" fill="none" aria-hidden="true">
+        <path className="thought-flight-path" />
+      </svg>
+      <div className="thought-rocket" aria-hidden="true">
+        <DrawnSketch kind="plane" showTrail={false} />
+      </div>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { ArrowUpRight, GraduationCap } from "lucide-react";
 import { profile } from "@/data/profile";
+import { DrawnSketch } from "@/components/ui/drawn-sketch";
 export function About() {
   return (
     <section id="about" className="profile-section section-shell">
@@ -15,6 +16,9 @@ export function About() {
         <p className="script profile-photo-note">
           The person behind the projects.
         </p>
+        <div className="profile-rocket-landing" aria-hidden="true">
+          <DrawnSketch kind="plane" showTrail={false} />
+        </div>
       </div>
       <div className="profile-story">
         <span className="mono profile-intro">A little about me</span>
