@@ -314,6 +314,8 @@ uniform float uDepth;
 uniform float uGlyphTime;
 uniform float uSeedValue;
 uniform float uLight;
+uniform vec3 uScatterPoint;
+uniform float uScatterRadius;
 ${COMMON}
 float sampleGlyph(float index, vec2 local, vec2 coord, float soft) {
   float column = mod(index, uAtlasGrid.x);
@@ -325,7 +327,12 @@ float sampleGlyph(float index, vec2 local, vec2 coord, float soft) {
 }
 
 vec4 glyphAt(vec2 px) {
-  vec2 coord = (px - uOffset) / uCell;
+  vec2 center = uResolution * 0.5 + uScatterPoint.xy * uResolution.y;
+  vec2 delta = px - center;
+  float distance = length(delta);
+  float force = (1.0 - smoothstep(0.0, uScatterRadius, distance)) * uScatterPoint.z;
+  vec2 displacement = delta / max(distance, 1.0) * force * uCell.y * 3.0;
+  vec2 coord = (px - displacement - uOffset) / uCell;
   vec2 cell = floor(coord);
   vec2 local = coord - cell;
   vec2 uv = clamp(((cell + 0.5) * uCell + uOffset) / uResolution, vec2(0.0), vec2(1.0));
@@ -350,7 +357,7 @@ vec4 glyphAt(vec2 px) {
   float focus = step(hash12(cell * 0.71 + 9.2 + uSeedValue), uDepth);
   float coverage = sampleGlyph(index, local, coord, focus * 1.2);
   float alpha = uOpacity * present * cutoff * coverage * mix(1.0, 0.35 + 0.65 * level, 0.55) * (1.0 - focus * 0.5);
-  alpha *= 1.0 - smoothstep(0.02, 0.75, aux.g);
+  alpha *= 1.0 - 0.35 * smoothstep(0.02, 0.75, aux.g);
   if (uLight < 0.5) {
     vec3 light = field.rgb * 1.45 + vec3(0.04) * field.a;
     return vec4(light * alpha, field.a * alpha);
@@ -703,6 +710,7 @@ const GradientASCII = ({
     const trailData = new Float32Array(MAX_TRAIL * 4);
     const trail: Point[] = [];
     const pointer = { x: 0, y: 0, inside: false };
+    const scatterPoint = { x: 0, y: 0, age: 10 };
     let atlas: Atlas | null = null;
     let atlasKey = "";
     let paletteKey = "";
@@ -773,6 +781,18 @@ const GradientASCII = ({
       gl.uniform1f(u.uGlyphTime, glyphTime);
       gl.uniform1f(u.uSeedValue, s.variation);
       gl.uniform1f(u.uLight, s.lightMode ? 1 : 0);
+      const strength =
+        reduce || s.paused ? 0 : Math.max(0, 1 - scatterPoint.age / 0.7);
+      gl.uniform3f(
+        u.uScatterPoint,
+        scatterPoint.x,
+        scatterPoint.y,
+        strength * strength,
+      );
+      gl.uniform1f(
+        u.uScatterRadius,
+        Math.max(44, s.scrambleRadius * view.height) * view.ratio,
+      );
     };
 
     const draw = () => {
@@ -919,6 +939,7 @@ const GradientASCII = ({
     };
 
     const updateInput = (dt: number) => {
+      scatterPoint.age += dt;
       trail.forEach((point) => {
         point.age += dt;
       });
@@ -995,6 +1016,9 @@ const GradientASCII = ({
       locate(event);
       const s = settingsRef.current;
       if (!pointer.inside || !s.mouseInteraction || s.paused || reduce) return;
+      scatterPoint.x = pointer.x;
+      scatterPoint.y = pointer.y;
+      scatterPoint.age = 0;
       const head = trail[0];
       const gap = head
         ? Math.hypot(pointer.x - head.x, pointer.y - head.y)
@@ -1020,6 +1044,9 @@ const GradientASCII = ({
       locate(event);
       const s = settingsRef.current;
       if (!pointer.inside || !s.clickEffect || s.paused || reduce) return;
+      scatterPoint.x = pointer.x;
+      scatterPoint.y = pointer.y;
+      scatterPoint.age = 0;
       clicks.unshift({ x: pointer.x, y: pointer.y, age: 0 });
       if (clicks.length > MAX_CLICKS) clicks.pop();
       wake();

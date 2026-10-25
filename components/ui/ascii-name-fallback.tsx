@@ -49,7 +49,8 @@ export function AsciiNameFallback({
       disposed = false,
       last = 0,
       clock = 0,
-      tick = 0;
+      tick = 0,
+      moveClock = -10;
     const pointer = { x: -1000, y: -1000, inside: false };
     const paint = () => {
       ctx.clearRect(0, 0, width, height);
@@ -65,15 +66,18 @@ export function AsciiNameFallback({
           const dx = g.x - pointer.x,
             dy = g.y - pointer.y,
             distance = Math.hypot(dx, dy),
-            radius = Math.min(110, width * 0.2),
-            force = pointer.inside ? Math.max(0, 1 - distance / radius) : 0;
+            radius = Math.min(84, width * 0.18),
+            trail = Math.max(0, 1 - (clock - moveClock) / 0.7),
+            force = pointer.inside
+              ? Math.max(0, 1 - distance / radius) * trail
+              : 0;
           g.vx += (dx / Math.max(1, distance)) * force * 2.8;
           g.vy += (dy / Math.max(1, distance)) * force * 2.8;
           g.vx = (g.vx + (g.homeX - g.x) * 0.025) * 0.84;
           g.vy = (g.vy + (g.homeY - g.y) * 0.025) * 0.84;
           g.x += g.vx;
           g.y += g.vy;
-          g.opacity += ((force > 0.12 ? 0 : 1) - g.opacity) * 0.14;
+          g.opacity += (1 - force * 0.35 - g.opacity) * 0.14;
         }
         const blend =
             (Math.sin(
@@ -98,7 +102,8 @@ export function AsciiNameFallback({
         return;
       }
       if (now - last >= 30) {
-        clock += Math.min(0.05, (now - (last || now - 33)) / 1000);
+        const dt = Math.min(0.05, (now - (last || now - 33)) / 1000);
+        clock += dt;
         last = now;
         paint();
       }
@@ -195,6 +200,7 @@ export function AsciiNameFallback({
       )
         return;
       locate(event);
+      moveClock = clock;
       wake();
     };
     const burst = (event: PointerEvent) => {
@@ -215,10 +221,13 @@ export function AsciiNameFallback({
       glyphs.forEach((g) => {
         const dx = g.x - pointer.x,
           dy = g.y - pointer.y,
-          d = Math.max(1, Math.hypot(dx, dy));
-        g.vx += (dx / d) * (8 + g.seed * 12);
-        g.vy += (dy / d) * (8 + g.seed * 12);
-        g.opacity = 0.15;
+          d = Math.max(1, Math.hypot(dx, dy)),
+          radius = Math.min(100, width * 0.22);
+        if (d >= radius) return;
+        const strength = (1 - d / radius) * (8 + g.seed * 8);
+        g.vx += (dx / d) * strength;
+        g.vy += (dy / d) * strength;
+        g.opacity = 0.8;
       });
       wake();
     };

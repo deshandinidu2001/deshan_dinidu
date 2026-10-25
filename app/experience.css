@@ -745,6 +745,12 @@ html[data-intro="loading"] .page-progress {
 .curiosity-caption {
   z-index: 1;
 }
+[data-theme="dark"] .curiosity-break {
+  --hero-bg: #11180f;
+  --fg: #f0f0e6;
+  --muted: #adb8a4;
+  --accent-text: #c6ff3d;
+}
 .ascii-name-fallback,
 .curiosity-art .gradient-ascii-container {
   position: absolute;

@@ -1,7 +1,7 @@
 "use client";
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
-import { ArrowDownRight, Pause, Play } from "lucide-react";
+import { ArrowDownRight } from "lucide-react";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import BlurText from "@/components/react-bits/BlurText";
 import { AsciiNameFallback } from "@/components/ui/ascii-name-fallback";
@@ -14,8 +14,7 @@ const name = "DESHAN\nDINIDU";
 
 export function CuriosityBreak() {
   const ref = useRef<HTMLElement>(null),
-    [near, setNear] = useState(false),
-    [paused, setPaused] = useState(false);
+    [near, setNear] = useState(false);
   const [status, setStatus] = useState<"idle" | "ready" | "unavailable">(
     "idle",
   );
@@ -49,7 +48,7 @@ export function CuriosityBreak() {
         <AsciiNameFallback
           text={name}
           active={near && status !== "ready"}
-          paused={paused}
+          paused={false}
           reduced={reduced}
         />
         {near && status !== "unavailable" && (
@@ -69,9 +68,9 @@ export function CuriosityBreak() {
             speed={0.35}
             flow={0.2}
             intro={false}
-            paused={paused || reduced}
-            mouseInteraction={!paused && !reduced}
-            scrambleRadius={0.16}
+            paused={reduced}
+            mouseInteraction={!reduced}
+            scrambleRadius={0.11}
             clickEffect="burst"
             dpr={1}
           />
@@ -91,19 +90,8 @@ export function CuriosityBreak() {
         <span className="mono">
           {reduced
             ? "Every character finds its place."
-            : "Move over the letters. Watch them find their way back."}
+            : "Move over the letters. The characters scatter, then find their way back."}
         </span>
-        {!reduced && near && (
-          <button
-            type="button"
-            onClick={() => setPaused(!paused)}
-            aria-label={
-              paused ? "Resume ASCII animation" : "Pause ASCII animation"
-            }
-          >
-            {paused ? <Play size={14} /> : <Pause size={14} />}
-          </button>
-        )}
       </div>
     </section>
   );

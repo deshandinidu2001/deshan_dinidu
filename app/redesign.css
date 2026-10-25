@@ -579,15 +579,6 @@ html[data-theme-transition]::view-transition {
   font-size: 9px;
   color: var(--muted);
 }
-.curiosity-controls > button {
-  display: grid;
-  place-items: center;
-  min-width: 44px;
-  height: 44px;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  background: var(--card-bg);
-}
 .footer-invitation-new {
   grid-template-columns: 1.4fr 1fr;
   align-items: center;
