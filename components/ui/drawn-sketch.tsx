@@ -24,9 +24,11 @@ const paths = {
 export function DrawnSketch({
   kind,
   className = "",
+  showTrail = true,
 }: {
   kind: keyof typeof paths;
   className?: string;
+  showTrail?: boolean;
 }) {
   const reduced = useReducedMotion();
   return (
@@ -36,24 +38,26 @@ export function DrawnSketch({
       fill="none"
       aria-hidden="true"
     >
-      {paths[kind].map((d, i) =>
-        reduced ? (
-          <path key={i} d={d} />
-        ) : (
-          <motion.path
-            key={i}
-            d={d}
-            initial={{ pathLength: 0, opacity: 0 }}
-            whileInView={{ pathLength: 1, opacity: 1 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{
-              duration: 1.1,
-              delay: i * 0.1,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-          />
-        ),
-      )}
+      {paths[kind]
+        .filter((_, i) => kind !== "plane" || showTrail || i < 2)
+        .map((d, i) =>
+          reduced ? (
+            <path key={i} d={d} />
+          ) : (
+            <motion.path
+              key={i}
+              d={d}
+              initial={{ pathLength: 0, opacity: 0 }}
+              whileInView={{ pathLength: 1, opacity: 1 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{
+                duration: 1.1,
+                delay: i * 0.1,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            />
+          ),
+        )}
     </svg>
   );
 }

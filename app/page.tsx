@@ -25,8 +25,9 @@ export default async function Home() {
         <ProcessStrip />
         <AILab />
         <Capabilities />
-        <SketchThought />
-        <About />
+        <SketchThought>
+          <About />
+        </SketchThought>
         <FerrofluidBreak />
       </main>
       <Contact />
