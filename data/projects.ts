@@ -12,6 +12,7 @@ export type Project = {
   scope: string[];
   note: string;
   source: string;
+  detailsReady?: boolean;
 };
 export const filters = [
   "All",
@@ -20,9 +21,10 @@ export const filters = [
   "AI",
   "Systems",
 ] as const;
-export const projects: Project[] = [
+const projectSummaries: Project[] = [
   {
     slug: "spectraleaf",
+    detailsReady: true,
     name: "SpectraLeaf",
     subtitle: "Turning tea fermentation into a readable signal.",
     description:
@@ -48,49 +50,69 @@ export const projects: Project[] = [
       "A Node.js and Express backend connects application requests with DynamoDB.",
       "The project explores how sensing and digital batch profiles can support tea fermentation monitoring.",
     ],
-    note: "Team project. This portfolio does not claim individual ownership of every component or measured improvements in tea quality. Artwork is a conceptual system study; real screenshots are still to be supplied.",
-    source:
-      "Public repository README and web, mobile, backend package manifests; reviewed 23 October 2026.",
+    note: "Team research prototype. My contribution covers the software platform; hardware and embedded development were part of the wider team project.",
+    source: "Project details and screenshots supplied by Deshan Dinidu.",
   },
   {
     slug: "ran-technology",
+    detailsReady: true,
     name: "RAN Technology",
-    subtitle: "A TypeScript project, taking shape.",
+    subtitle: "Computer shopping. Repair services. One connected place.",
     description:
-      "A TypeScript project. A fuller write-up will follow when its scope and contribution notes are ready.",
-    categories: [], // Scope is not documented well enough to assign a discipline yet.
-    stack: ["TypeScript"],
+      "A full-stack computer-products storefront connecting shopping, orders, repair bookings and quote requests.",
+    categories: ["Full Stack", "Systems"],
+    stack: [
+      "React",
+      "TypeScript",
+      "Vite",
+      "Tailwind CSS",
+      "Zustand",
+      "Node.js",
+      "Express",
+      "Supabase",
+      "Cloudinary",
+    ],
     repository: "https://github.com/deshandinidu2001/RAN-Technology-",
     visual: "ran",
     context:
-      "Personal repository. The public repository does not currently include a project README.",
+      "An end-to-end computer-products storefront and repair-services platform.",
     scope: [
-      "The repository contains the ran-tech-shop application directory.",
-      "TypeScript is the primary language reported by GitHub.",
+      "Product discovery, customer accounts, shopping carts, checkout and order management.",
+      "Repair bookings, quotation requests, service statuses and shop administration.",
     ],
-    note: "TODO: Supply project scope, role, screenshots, and implementation notes. No business outcomes or deployment claims are made.",
-    source:
-      "GitHub repository metadata and root directory; reviewed 23 October 2026.",
+    note: "A substantial implementation with Vercel deployment configuration. Current live deployment and exact completion dates are not documented.",
+    source: "Project details and screenshots supplied by Deshan Dinidu.",
   },
   {
     slug: "smartloan",
+    detailsReady: true,
     name: "Smartloan BLMS",
-    subtitle: "A JavaScript system in progress.",
+    subtitle: "Loan management, with AI-assisted eligibility prediction.",
     description:
-      "A JavaScript project with frontend and backend directories. Project details are being documented.",
-    categories: ["Full Stack", "Systems"],
-    stack: ["JavaScript"],
+      "AI-assisted loan eligibility and risk prediction, connected to customer records, approvals and repayment management in a full-stack prototype.",
+    categories: ["Full Stack", "AI", "Systems"],
+    stack: [
+      "React",
+      "Vite",
+      "Tailwind CSS",
+      "Node.js",
+      "Express",
+      "Prisma",
+      "SQLite",
+      "Python",
+      "Flask",
+      "scikit-learn",
+    ],
     repository: "https://github.com/deshandinidu2001/Smartloan_BLMS",
     visual: "loan",
     context:
-      "Personal repository. A project README was not available during content review.",
+      "A functional local loan-management prototype for administrators and loan officers.",
     scope: [
-      "The public repository separates frontend and backend code.",
-      "An ai-model directory is present; model behavior and results have not been verified.",
+      "Role-aware customer, KYC, application, approval and repayment workflows.",
+      "An Express/Prisma backend and a separate Flask eligibility service connect the React interface to SQLite and experimental model outputs.",
     ],
-    note: "TODO: Supply scope, personal contribution, screenshots, and current status. Directory names alone are not evidence of completed AI functionality.",
-    source:
-      "GitHub repository metadata and root directory; reviewed 23 October 2026.",
+    note: "A local prototype. Production hosting, model accuracy and real-customer outcomes have not been established.",
+    source: "Project details and screenshots supplied by Deshan Dinidu.",
   },
   {
     slug: "gaming-cafe",
@@ -151,3 +173,4 @@ export const projects: Project[] = [
     source: "Public repository README; reviewed 23 October 2026.",
   },
 ];
+export const projects: Project[] = projectSummaries;

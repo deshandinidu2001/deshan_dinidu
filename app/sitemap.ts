@@ -5,10 +5,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: base, changeFrequency: "monthly", priority: 1 },
     { url: `${base}/experiments`, changeFrequency: "monthly", priority: 0.6 },
-    ...projects.map((p) => ({
-      url: `${base}/work/${p.slug}`,
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    })),
+    ...projects
+      .filter((p) => p.detailsReady)
+      .map((p) => ({
+        url: `${base}/work/${p.slug}`,
+        changeFrequency: "monthly" as const,
+        priority: 0.8,
+      })),
   ];
 }

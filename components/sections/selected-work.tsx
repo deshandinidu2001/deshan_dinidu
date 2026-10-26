@@ -1,12 +1,13 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Plus } from "lucide-react";
+import { ArrowUpRight, Plus, LockKeyhole } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { projects, filters } from "@/data/projects";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { TransitionLink } from "@/components/ui/transition-link";
 import BlurText from "@/components/react-bits/BlurText";
+import { ProjectLock } from "@/components/work/project-lock";
 export function SelectedWork() {
   const [filter, setFilter] = useState<string>("All"),
     [open, setOpen] = useState<string | null>("spectraleaf");
@@ -29,6 +30,11 @@ export function SelectedWork() {
         </div>
         <p className="script">A few ideas that became something.</p>
       </div>
+      <p className="work-index-availability mono">
+        {projects.filter((project) => project.detailsReady).length} case studies
+        · {projects.filter((project) => !project.detailsReady).length} write-ups
+        in progress
+      </p>
       <div
         className="work-index-filters"
         role="group"
@@ -58,6 +64,7 @@ export function SelectedWork() {
             key={project.slug}
             className="work-index-item"
             data-open={open === project.slug}
+            data-locked={!project.detailsReady}
           >
             <h3>
               <button
@@ -74,14 +81,25 @@ export function SelectedWork() {
                 </span>
                 <span className="work-index-name">{project.name}</span>
                 <span className="work-index-category mono">
-                  {project.categories.join(" / ") || "In development"}
+                  {project.detailsReady
+                    ? project.categories.join(" / ")
+                    : "Case study coming soon"}
                 </span>
-                <Plus
-                  className="work-index-plus"
-                  strokeWidth={1.3}
-                  size={25}
-                  aria-hidden="true"
-                />
+                {project.detailsReady ? (
+                  <Plus
+                    className="work-index-plus"
+                    strokeWidth={1.3}
+                    size={25}
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <LockKeyhole
+                    className="work-index-lock"
+                    size={22}
+                    strokeWidth={1.4}
+                    aria-hidden="true"
+                  />
+                )}
               </button>
             </h3>
             <AnimatePresence initial={false}>
@@ -97,28 +115,32 @@ export function SelectedWork() {
                     ease: [0.22, 1, 0.36, 1],
                   }}
                 >
-                  <div className="work-index-detail-inner">
-                    <div>
-                      <p>{project.description}</p>
-                      <div className="work-index-stack mono">
-                        {project.stack.map((tag) => (
-                          <span key={tag}>{tag}</span>
-                        ))}
+                  {project.detailsReady ? (
+                    <div className="work-index-detail-inner">
+                      <div>
+                        <p>{project.description}</p>
+                        <div className="work-index-stack mono">
+                          {project.stack.map((tag) => (
+                            <span key={tag}>{tag}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="work-index-actions">
+                        <TransitionLink href={`/work/${project.slug}`}>
+                          Explore the project <ArrowUpRight size={17} />
+                        </TransitionLink>
+                        <a
+                          href={project.repository}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Source code <ArrowUpRight size={15} />
+                        </a>
                       </div>
                     </div>
-                    <div className="work-index-actions">
-                      <TransitionLink href={`/work/${project.slug}`}>
-                        Explore the project <ArrowUpRight size={17} />
-                      </TransitionLink>
-                      <a
-                        href={project.repository}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        Source code <ArrowUpRight size={15} />
-                      </a>
-                    </div>
-                  </div>
+                  ) : (
+                    <ProjectLock name={project.name} compact />
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>

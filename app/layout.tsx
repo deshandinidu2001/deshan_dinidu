@@ -13,6 +13,7 @@ import { PageProgress } from "@/components/ui/page-progress";
 import "./refinements.css";
 import "./redesign.css";
 import "./experience.css";
+import "./projects.css";
 const displayFont = localFont({
   src: "../node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2",
   variable: "--font-space",
