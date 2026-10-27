@@ -149,9 +149,9 @@ export function SelectedWork() {
       </div>
       {!shown.length && (
         <div className="work-index-empty">
-          <p>AI explorations are taking shape in the lab.</p>
-          <Link href="#ai-lab">
-            Take a look inside <ArrowUpRight size={17} />
+          <p>More projects are on the way. Explore how I approach a build.</p>
+          <Link href="#approach">
+            See my approach <ArrowUpRight size={17} />
           </Link>
         </div>
       )}

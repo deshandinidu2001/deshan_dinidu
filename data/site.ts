@@ -24,26 +24,14 @@ export const siteCopy = {
     ],
     tools: "THE TOOLS THAT CONNECT IT ALL",
   },
-  contributions: {
-    label: "THE PRACTICE BEHIND THE PROJECTS",
-    title: "Small commits.\nContinuous progress.",
-    description:
-      "A public record of showing up, trying things, and building them a little further.",
-    github: "Follow the commits",
-    snapshot: "Public snapshot",
-    live: "Live from GitHub",
-    unavailable: "Contribution data is temporarily unavailable.",
-    less: "Less",
-    more: "More",
-  },
   work: {
     label: "02 / SELECTED WORK",
     title: "Different problems.",
     subtitle: "Connected thinking.",
     description:
       "Web experiences, mobile interfaces, and the systems that make them work.",
-    empty: "The AI experiments are taking shape in the lab.",
-    emptyCta: "Visit the AI Lab",
+    empty: "More projects are on the way. Explore how I approach a build.",
+    emptyCta: "See my approach",
     schematic: "ORIGINAL SYSTEM STUDY / NOT A PRODUCT SCREENSHOT",
     repository: "Explore repository",
     caseStudy: "View project",
@@ -79,17 +67,6 @@ export const siteCopy = {
         code: "04 / SHIP",
       },
     ],
-  },
-  ai: {
-    margin: "a work in progress",
-    label: "03 / AI LAB",
-    title: "A space for\nwhat comes next.",
-    description:
-      "Exploring the space between a model and a useful product. A workbench for AI-powered interfaces, with room to learn in public.",
-    status: "EARLY EXPLORATIONS",
-    flow: ["Input", "Model", "Interface"],
-    sceneLabel: "FIG. 02 — FROM TOKENS TO INTERFACE",
-    note: "Experiments here are planned, not completed work.",
   },
   capabilities: {
     label: "04 / WHAT I DO",

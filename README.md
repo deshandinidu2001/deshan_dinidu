@@ -1,6 +1,6 @@
 # Deshan Dinidu — Signal → System
 
-A portfolio for a full stack developer and AI developer. A signal travels from a cursor-responsive network, through project systems and a model workbench, to the next project brief.
+A portfolio for a full stack developer and AI developer. A signal travels from a cursor-responsive network, through project systems and engineering examples, to the next project brief.
 
 Built for **Next.js App Router, TypeScript, Tailwind CSS, and Vercel**. The design and original SVG illustrations are specific to this portfolio. [Design brief](docs/design-brief.md).
 
@@ -30,7 +30,7 @@ npm run start
 - Contextual cursor, magnetic actions, scrambled navigation, role ticker, drawn SVG annotations, a progress line, and section nodes.
 - Dark and light themes saved in local storage, responsive navigation, sticky About panels, and a technology orbit.
 - Six selected projects with counted filters and case-study routes. Browser View Transitions share the project illustration between grid and detail where supported.
-- An AI Lab with **two labelled TODO explorations**, and two MDX-rendered note drafts.
+- An interactive engineering approach section with examples from SpectraLeaf, RAN Technology, and Smartloan BLMS, plus two MDX-rendered note drafts.
 - A separate canvas playground with attract/repel modes, pause/reset, a connection-radius control, and keyboard input.
 - A native accessible project-brief dialog. Visitors can copy or download a brief. No form data is sent to a server.
 - Metadata, generated Open Graph image, sitemap, robots, favicon, and Person JSON-LD.
@@ -54,22 +54,13 @@ data/
   site.ts                Site copy and interface labels
   ai-projects.ts         Exactly two planned sample entries
   notes.ts               Draft metadata and MDX source strings
-  contribution-snapshot.ts  Real dated public GitHub snapshot
 hooks/                   Reduced-motion preference
-lib/                     Server-only GitHub fetch and route transitions
+lib/                     Route transitions and shared utilities
 public/projects/         Six original SVG system studies
-scripts/                 Artwork generator and snapshot parser
+scripts/                 Artwork generator and audit tools
 tests/                   Responsive browser and interaction checks
 docs/                    Design and verification notes
 ```
-
-## GitHub activity
-
-Without a token, the site uses an actual public GitHub snapshot captured on **23 October 2026**: **92 contributions across 296 calendar days**, from 1 January through 23 October 2026. It is visibly labelled **Public snapshot**, with the capture date. Empty days remain empty; no random activity is generated.
-
-Set `GITHUB_TOKEN` in `.env.local` or Vercel's server environment to enable the GitHub GraphQL contribution calendar. Use a token permitted to read this user's public profile. The token is imported only by `lib/contributions.ts`, which is marked `server-only`, and never enters client props or public environment variables. Requests and the page revalidate every hour. Missing tokens, HTTP failures, GraphQL errors, or timeouts return the dated snapshot.
-
-To refresh the fallback, save the public response from `https://github.com/users/deshandinidu2001/contributions` as `.qa/contributions.html`, update the cutoff and capture date in `scripts/parse-snapshot.mjs`, then run it. The parser reads actual date, level, and tooltip count fields and fails if no cells are found. Review the resulting dates and total before committing the snapshot.
 
 ## Content still needed from Deshan
 
@@ -98,10 +89,10 @@ Measured production Lighthouse scores on this machine: **mobile performance 90; 
 
 1. Push this directory to a Git repository and import it into Vercel.
 2. Keep the detected **Next.js** preset, `npm run build`, and default output directory.
-3. Set `NEXT_PUBLIC_SITE_URL` to the final HTTPS origin. Optionally set `GITHUB_TOKEN` as a server-side secret.
-4. Deploy, then verify the canonical origin, OG image, mobile layout, and contribution-source badge.
+3. Set `NEXT_PUBLIC_SITE_URL` to the final HTTPS origin.
+4. Deploy, then verify the canonical origin, OG image, mobile layout, and engineering example links.
 
-The app has no database requirement and does not require a GitHub token to build. Deployment credentials and a destination project are not included in this workspace.
+The app has no database requirement or GitHub token requirement. Deployment credentials and a destination project are not included in this workspace.
 
 ## Content sources
 

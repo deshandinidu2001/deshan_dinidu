@@ -146,7 +146,7 @@ export function Contact() {
         <nav aria-label="Footer navigation">
           {[
             { label: "Work", href: "#work" },
-            { label: "AI Lab", href: "#ai-lab" },
+            { label: "Approach", href: "#approach" },
             { label: "About", href: "#about" },
             { label: "Toolkit", href: "#built-with" },
           ].map((link) => (

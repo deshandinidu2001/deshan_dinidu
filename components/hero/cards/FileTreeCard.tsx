@@ -12,7 +12,7 @@ export function FileTreeCard() {
         <ul className="hero-file-tree">
           {[
             { name: "work", href: "#work" },
-            { name: "ai-lab", href: "#ai-lab" },
+            { name: "approach", href: "#approach" },
             { name: "about", href: "#about" },
             { name: "toolkit", href: "#built-with" },
             { name: "contact", href: "#contact" },

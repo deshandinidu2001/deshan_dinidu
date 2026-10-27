@@ -4,9 +4,7 @@ test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => sessionStorage.setItem("signal-intro", "1"));
 });
 
-test("page composition, real activity, and responsive layouts", async ({
-  page,
-}, info) => {
+test("page composition and responsive layouts", async ({ page }, info) => {
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   page.on("console", (e) => {
@@ -23,9 +21,7 @@ test("page composition, real activity, and responsive layouts", async ({
     { timeout: 15000 },
   );
   await page.screenshot({ path: `.qa/${info.project.name}-hero.png` });
-  await expect(page.locator(".snapshot-badge")).toContainText(
-    "Public snapshot",
-  );
+  await expect(page.locator(".contribution-section")).toHaveCount(0);
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth > window.innerWidth,
   );
@@ -39,8 +35,8 @@ test("page composition, real activity, and responsive layouts", async ({
     /^(none|matrix\(1, 0, 0, 1, 0, 0\))$/,
   );
   await page.screenshot({ path: `.qa/${info.project.name}-work.png` });
-  await page.locator("#ai-lab").scrollIntoViewIfNeeded();
-  await page.screenshot({ path: `.qa/${info.project.name}-lab.png` });
+  await page.locator("#approach").scrollIntoViewIfNeeded();
+  await page.screenshot({ path: `.qa/${info.project.name}-approach.png` });
   await page.locator("#about").scrollIntoViewIfNeeded();
   await page.screenshot({ path: `.qa/${info.project.name}-about.png` });
   await page.locator("#contact").scrollIntoViewIfNeeded();
@@ -56,7 +52,7 @@ test("filters and project case-study navigation", async ({ page }) => {
   await page.getByRole("button", { name: /^AI\s*0/ }).click();
   await expect(page.locator(".project-card")).toHaveCount(0);
   await expect(
-    page.getByRole("link", { name: "Visit the AI Lab" }),
+    page.getByRole("link", { name: "See my approach" }),
   ).toBeVisible();
   await page.getByRole("button", { name: /^Systems/ }).click();
   await expect(page.locator(".project-card")).toHaveCount(5);
@@ -203,27 +199,51 @@ test("playground controls and reduced-motion fallbacks", async ({
   ).toBe(false);
 });
 
-test("intro completes and both WebGL scenes render", async ({ page }, info) => {
-  test.skip(
-    info.project.name !== "desktop",
-    "The pinned scene sequence is a desktop composition.",
-  );
-  await page.addInitScript(() => sessionStorage.removeItem("signal-intro"));
+test("engineering approach examples and project links", async ({
+  page,
+}, info) => {
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  await expect(page.locator(".scene-hero canvas")).toBeVisible();
-  await expect(page.locator(".preloader")).toBeHidden({ timeout: 10000 });
-  await page
-    .locator("#ai-lab")
-    .evaluate((el) => el.scrollIntoView({ block: "start" }));
-  await expect(page.locator(".scene-lab canvas")).toBeVisible({
-    timeout: 15000,
-  });
-  await expect(page.locator(".scene-lab > .network-fallback")).toHaveCSS(
-    "opacity",
-    "0",
+  const section = page.locator("#approach");
+  await section.scrollIntoViewIfNeeded();
+  await expect(section.getByRole("heading", { level: 2 })).toHaveText(
+    "The thinking behind the build.",
   );
-  await page.screenshot({ path: ".qa/desktop-lab-live.png" });
+  await expect(page.locator(".contribution-section")).toHaveCount(0);
+  await expect(page.getByText("The AI workbench", { exact: true })).toHaveCount(
+    0,
+  );
+  for (const [name, project, slug] of [
+    ["Connected experiences", "SpectraLeaf", "spectraleaf"],
+    ["Practical workflows", "RAN Technology", "ran-technology"],
+    ["AI with a purpose", "Smartloan BLMS", "smartloan"],
+  ]) {
+    const button = section.getByRole("button", { name, exact: true });
+    await button.focus();
+    await page.keyboard.press("Enter");
+    await expect(button).toHaveAttribute("aria-pressed", "true");
+    await expect(
+      section.getByRole("link", { name: `Explore ${project}` }),
+    ).toHaveAttribute("href", `/work/${slug}`);
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth > window.innerWidth,
+      ),
+    ).toBe(false);
+  }
+  await section
+    .getByRole("button", { name: "Connected experiences", exact: true })
+    .click();
+  await section.scrollIntoViewIfNeeded();
+  await page.screenshot({ path: `.qa/${info.project.name}-approach.png` });
+  const accessibility = await new AxeBuilder({ page })
+    .include("#approach")
+    .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+    .analyze();
+  expect(accessibility.violations).toEqual([]);
+  await section.getByRole("link", { name: "Explore SpectraLeaf" }).click();
+  await expect(page).toHaveURL(/work\/spectraleaf/);
   expect(errors).toEqual([]);
 });

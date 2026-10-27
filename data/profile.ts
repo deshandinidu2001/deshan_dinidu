@@ -24,7 +24,7 @@ export const profile = {
 
 export const navigation = [
   { label: "Work", href: "/#work" },
-  { label: "AI Lab", href: "/#ai-lab" },
+  { label: "Approach", href: "/#approach" },
   { label: "About", href: "/#about" },
   { label: "Contact", href: "/#contact" },
 ];
